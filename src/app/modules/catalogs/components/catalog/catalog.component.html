@@ -1,0 +1,7 @@
+<vl-loader *ngIf="(catalogDefinitions$ | async) == null; else content" [label]="'Fetching UI definitions'"></vl-loader>
+
+<ng-template #content>
+  <div class="container" *ngIf="catalogDefinitions$ | async as definitions">
+    <vl-card *ngFor="let definition of definitions" [cardTitle]="definition" [link]="['./', definition]"></vl-card>
+  </div>
+</ng-template>

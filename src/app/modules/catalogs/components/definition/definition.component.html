@@ -1,0 +1,7 @@
+<vl-loader *ngIf="(definition$ | async) == null; else content" [label]="'Loading UI definition'"></vl-loader>
+
+<ng-template #content>
+  <ng-container *ngIf="definition$ | async as catalog">
+    <vl-cms-preview [uiDefinition]="catalog"></vl-cms-preview>
+  </ng-container>
+</ng-template>
