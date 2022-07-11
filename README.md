@@ -8,7 +8,7 @@
 
 ### QUICK START:
 
-Create global variable NEXUS_NPM_AUTH with Veloce Nexus authorization token 
+Create global variable NEXUS_NPM_AUTH with Veloce Nexus authorization token
 Install dependencies:
 
 ```
@@ -34,11 +34,6 @@ Update `window.VELO_KEY` (in `src\index.html`) with said token
 Copy host URL from any XHR request (ex. https://my-org-velo-cpq-dot-spheric-baton-328205.ue.r.appspot.com)
 Update `target` property of `/services/*` object in `src\proxy.conf.json` with said URL
 
-Start the local backend service:
-
-```
-npm run api
-```
 
 Start the app:
 
