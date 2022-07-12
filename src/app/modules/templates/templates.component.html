@@ -1,0 +1,6 @@
+<vl-loader *ngIf="(templates$ | async) == null; else content" [label]="'Fetching templates'"></vl-loader>
+
+<ng-template #content>
+  <p-tree [value]="templates$ | async" selectionMode="single" [selection]="selectedNode" (onNodeSelect)="handleNodeSelect($event.node)"></p-tree>
+  <router-outlet></router-outlet>
+</ng-template>

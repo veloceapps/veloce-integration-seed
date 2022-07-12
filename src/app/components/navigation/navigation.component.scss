@@ -1,0 +1,31 @@
+:host {
+  border: 1px solid var(--vl-border-color);
+  box-shadow: 0px 4px 20px rgba(39, 103, 193, 0.1);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  z-index: 6;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+}
+
+.logo {
+  flex-shrink: 0;
+  display: inline-flex;
+  margin-right: 16px;
+}
+
+p-tabmenu {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+:host ::ng-deep {
+  .p-tabmenu.sub-nav .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,23 @@
+.container {
+  height: 100%;
+  width: 100%;
+  padding: 10px 24px;
+  display: flex;
+  overflow-x: auto;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 1064px;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.router-wrapper {
+  flex-grow: 1;
+  padding-top: 10px;
+  overflow: hidden;
+}

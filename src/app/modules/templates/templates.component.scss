@@ -1,0 +1,38 @@
+:host {
+  display: flex;
+  height: 100%;
+}
+
+p-tree {
+  flex-shrink: 0;
+  width: 260px;
+  margin-right: 16px;
+
+  ::ng-deep .p-tree {
+    height: 100%;
+    padding: 0;
+
+    .p-tree-container {
+      padding: 4px 0;
+    }
+
+    .p-tree-container .p-treenode {
+      padding: 0;
+    }
+
+    .p-tree-container .p-treenode .p-treenode-content {
+      padding: 4px 8px;
+      margin-left: -22px;
+      padding-left: 30px;
+      border-radius: 0;
+
+      &.p-treenode-selectable.p-highlight {
+        font-weight: bold;
+      }
+
+      &.p-treenode-selectable:hover:not(.p-highlight) {
+        background: #f6f8fa;
+      }
+    }
+  }
+}

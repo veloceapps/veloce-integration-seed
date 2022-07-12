@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Veloce Integration</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  </head>
+  <body>
+    <app-root></app-root>
+
+    <script>
+      window.ADMIN_CONTEXT = true;
+      window.COMPRESSION_METHOD = 'none';
+      window.VELO_API = 'http://localhost:4202';
+      window.VELO_PUBLIC_PATH = './';
+      window.VELO_KEY = '';
+      window.VELO_BACK_FN = recordId => console.log('** Back fn called with recordId:', recordId);
+      window.global = window;
+    </script>
+  </body>
+</html>

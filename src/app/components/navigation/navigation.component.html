@@ -1,0 +1,18 @@
+<div class="main-nav">
+  <div class="logo">
+    <ng-container *ngTemplateOutlet="logo"></ng-container>
+  </div>
+
+  <p-tabMenu [model]="items" [activeItem]="activeItem$ | async">
+    <ng-template pTemplate="item" let-item>
+      <span class="p-menuitem-icon {{ item.icon }}"></span>
+      <span class="p-menuitem-text">{{ item.label }}</span>
+    </ng-template>
+  </p-tabMenu>
+</div>
+
+<ng-template #logo>
+  <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M13.1659 0H16L11.3065 12.7769H4.69353L0 0H2.83411L6.74789 10.6313H9.25961L13.1659 0Z" fill="#0466c8" />
+  </svg>
+</ng-template>

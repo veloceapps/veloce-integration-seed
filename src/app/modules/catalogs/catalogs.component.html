@@ -1,0 +1,7 @@
+<vl-loader *ngIf="(catalogsNames$ | async) == null; else content" [label]="'Fetching catalogs'"></vl-loader>
+
+<ng-template #content>
+  <div class="container" *ngIf="catalogsNames$ | async as names">
+    <vl-card *ngFor="let name of names" [cardTitle]="name" [link]="'/catalogs/' + name"></vl-card>
+  </div>
+</ng-template>
