@@ -8,8 +8,7 @@
 
 ### QUICK START:
 
-Create global variable NEXUS_NPM_AUTH with Veloce Nexus authorization token
-Install dependencies:
+Create global variable NEXUS_NPM_AUTH with Veloce Nexus authorization token and install dependencies:
 
 ```
 NEXUS_NPM_AUTH={{token}}
@@ -28,11 +27,13 @@ Install `veloce-sfdx-v3` plugin
 sfdx plugins:install veloce-sfdx-v3
 ```
 
-Open browser dev tools and from nine-dot menu launch **Veloce Studio**
-Copy authorization token from any XHR request
-Update `window.VELO_KEY` (in `src\index.html`) with said token
-Copy host URL from any XHR request (ex. https://my-org-velo-cpq-dot-spheric-baton-328205.ue.r.appspot.com)
-Update `target` property of `/services/*` object in `src\proxy.conf.json` with said URL
+Setup the app:
+
+- Open browser dev tools and from nine-dot menu launch **Veloce Studio**
+- Copy authorization token from any XHR request
+- Update `window.VELO_KEY` (in `src\index.html`) with said token
+- Copy host URL from any XHR request (ex. https://my-org-velo-cpq-dot-spheric-baton-328205.ue.r.appspot.com)
+- Update `target` property of `/services/*` object in `src\proxy.conf.json` with said URL
 
 
 Start the app:
