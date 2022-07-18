@@ -1,0 +1,32 @@
+.field {
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.field .p-inputswitch {
+  margin-top: 0.35rem;
+}
+
+.field .p-button {
+  height: 30px;
+
+  &.p-datepicker-trigger {
+    height: auto;
+  }
+}
+
+.field vl-control-error-message {
+  left: 0;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}

@@ -1,15 +1,18 @@
-<vl-loader *ngIf="(uiDefinition$ | async) == null; else content" [label]="'Loading UI definition'"></vl-loader>
+<vl-loader
+  *ngIf="(uiDefinition$ | async) == null || (modelId$ | async) == null; else content"
+  [label]="'Loading UI definition'"
+></vl-loader>
 
 <ng-template #content>
   <ng-container *ngIf="uiDefinition$ | async as uiDefinition">
     <vl-runtime-preview
       *ngIf="(isLegacy$ | async) === true"
-      [modelId]="modelId"
+      [modelId]="modelId$ | async"
       [uiDefinition]="$any(uiDefinition)"
     ></vl-runtime-preview>
     <vl-cms-preview
       *ngIf="(isLegacy$ | async) === false"
-      [modelId]="modelId"
+      [modelId]="modelId$ | async"
       [uiDefinition]="$any(uiDefinition)"
     ></vl-cms-preview>
   </ng-container>
