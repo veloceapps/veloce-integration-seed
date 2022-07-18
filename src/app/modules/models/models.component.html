@@ -1,7 +1,0 @@
-<vl-loader *ngIf="(modelsNames$ | async) == null; else content" [label]="'Fetching models'"></vl-loader>
-
-<ng-template #content>
-  <div class="container" *ngIf="modelsNames$ | async as names">
-    <vl-card *ngFor="let name of names" [cardTitle]="name" [link]="'/models/' + name"></vl-card>
-  </div>
-</ng-template>
