@@ -1,10 +1,20 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { FormErrorMessagesService } from '@veloce/components';
 import { FlowService } from '@veloce/sdk';
 import { Dictionary } from 'lodash';
-import { BehaviorSubject, map, tap } from 'rxjs';
+import { BehaviorSubject, map, Subject, takeUntil, tap } from 'rxjs';
 import { ConfigurationUiActions } from 'src/app/state/configuration-ui/configuration-ui.actions';
 import { ConfigUiCard, DebugSettings, FlowProperties } from '../../configuration-ui.types';
 
@@ -15,17 +25,13 @@ import { ConfigUiCard, DebugSettings, FlowProperties } from '../../configuration
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [FormErrorMessagesService],
 })
-export class DebugSettingsComponent {
-  @Input()
-  set card(data: ConfigUiCard | undefined) {
-    this._card = data;
-    this.initForm(data);
-  }
+export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() card?: ConfigUiCard;
 
   @Output() close = new EventEmitter<MouseEvent>();
   @Output() save = new EventEmitter<DebugSettings | undefined>();
 
-  _card?: ConfigUiCard;
+  public flows$ = new BehaviorSubject<FlowProperties[]>([]);
 
   public formControls = {
     id: new FormControl(null, Validators.required),
@@ -34,15 +40,38 @@ export class DebugSettingsComponent {
   };
   public form = new FormGroup(this.formControls);
 
-  public flows$ = new BehaviorSubject<FlowProperties[]>([]);
-
   labels: Dictionary<string> = {
     id: 'SF Object ID',
     flowId: 'Flow',
   };
 
+  destroy$ = new Subject<void>();
+
   constructor(private flowService: FlowService, private store: Store) {
     this.fetchFlows();
+  }
+
+  ngOnInit(): void {
+    this.formControls.debugMode.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(debugMode => {
+      if (debugMode) {
+        this.formControls.id.enable();
+        this.formControls.flowId.enable();
+      } else {
+        this.formControls.id.disable();
+        this.formControls.flowId.disable();
+      }
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.card) {
+      this.initForm(changes.card.currentValue);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private fetchFlows(): void {
@@ -74,21 +103,21 @@ export class DebugSettingsComponent {
   }
 
   public saveHandler(event: MouseEvent): void {
-    const flowId = this.formControls.flowId.value;
-    const flow = this.flows$.value.find(({ id }) => id === flowId);
-
-    if (this.form.invalid || !flow || !this._card) {
+    if (this.form.invalid || !this.card) {
       return;
     }
 
-    const settings: DebugSettings | undefined = this.formControls.debugMode.value
-      ? {
-          flow,
-          objectId: this.formControls.id.value,
-        }
-      : undefined;
+    const flowId = this.formControls.flowId.value;
+    const flow = this.flows$.value.find(({ id }) => id === flowId);
+    const settings: DebugSettings | undefined =
+      this.formControls.debugMode.value && flow
+        ? {
+            flow,
+            objectId: this.formControls.id.value,
+          }
+        : undefined;
 
-    const { model, ui } = this._card;
+    const { model, ui } = this.card;
     this.store.dispatch(new ConfigurationUiActions.SetDebugSettings({ model, ui, settings }));
 
     this.close.emit(event);
