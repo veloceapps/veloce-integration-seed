@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Params } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { BehaviorSubject, forkJoin, map, Observable, Subject, switchMap, tap } from 'rxjs';
+import { Dictionary } from 'lodash';
+import { BehaviorSubject, forkJoin, map, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { ModelsApiService } from 'src/app/services/models.service';
 import { ConfigurationUiState } from 'src/app/state/configuration-ui/configuration-ui.state';
 import { ConfigUiCard, DebugSettings } from './configuration-ui.types';
@@ -15,14 +16,22 @@ import { ConfigUiCard, DebugSettings } from './configuration-ui.types';
 export class ConfigurationUiComponent implements OnInit, OnDestroy {
   cards$ = new BehaviorSubject<ConfigUiCard[] | null>(null);
 
-  selectedCard: ConfigUiCard | undefined;
+  selectedCard?: ConfigUiCard;
 
   private destroy$ = new Subject<void>();
 
   constructor(private service: ModelsApiService, private store: Store) {}
 
   ngOnInit(): void {
-    this.fetchUiDefs();
+    this.service
+      .fetchModelsNames()
+      .pipe(
+        map(modelsNames => this.getUiDefinitionsByModel$(modelsNames)),
+        switchMap(uiDefs$ => (Object.keys(uiDefs$).length ? forkJoin(uiDefs$) : of({}))),
+        switchMap(uiDefs => this.mapUisToCards$(uiDefs)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(cards => this.cards$.next(cards));
   }
 
   ngOnDestroy(): void {
@@ -30,34 +39,24 @@ export class ConfigurationUiComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private fetchUiDefs(): void {
-    this.service
-      .fetchModelsNames()
-      .pipe(
-        map(modelsNames =>
-          modelsNames.reduce(
-            (acc, name) => ({
-              ...acc,
-              [name]: this.service.fetchAvailableModelDefinitions(name),
-            }),
-            {} as { [key: string]: Observable<string[]> },
-          ),
-        ),
-        switchMap(uis => forkJoin(uis)),
-        switchMap(uis =>
-          this.store.select(ConfigurationUiState.getDebugSettings).pipe(
-            map(settings =>
-              Object.entries(uis).reduce((acc, [modelName, uiNames]) => {
-                return [...acc, ...uiNames.map(ui => this.getCard(modelName, ui, settings[modelName]?.[ui]))];
-              }, [] as ConfigUiCard[]),
-            ),
-          ),
-        ),
+  private getUiDefinitionsByModel$(modelsNames: string[]): { [key: string]: Observable<string[]> } {
+    return modelsNames.reduce(
+      (acc, name) => ({
+        ...acc,
+        [name]: this.service.fetchAvailableModelDefinitions(name),
+      }),
+      {} as { [key: string]: Observable<string[]> },
+    );
+  }
 
-        tap(cards => this.cards$.next(cards)),
-        tap(cards => console.log(cards)),
-      )
-      .subscribe();
+  private mapUisToCards$(uis: Dictionary<string[]>): Observable<ConfigUiCard[]> {
+    return this.store.select(ConfigurationUiState.getDebugSettings).pipe(
+      map(settings =>
+        Object.entries(uis).reduce((acc, [modelName, uiNames]) => {
+          return [...acc, ...uiNames.map(ui => this.getCard(modelName, ui, settings[modelName]?.[ui]))];
+        }, [] as ConfigUiCard[]),
+      ),
+    );
   }
 
   public openDebugPanel(event: MouseEvent, card?: ConfigUiCard): void {
