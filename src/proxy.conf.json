@@ -1,6 +1,6 @@
 {
   "/services/*": {
-    "target": "https://2022-r2-1-0-qa-velo-cpq-dot-spheric-baton-328205.ue.r.appspot.com",
+    "target": "https://studio-dev-velo-cpq-dot-spheric-baton-328205.ue.r.appspot.com",
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug",
