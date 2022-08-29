@@ -1,0 +1,9 @@
+<div class="header">
+  <h4>{{ phone.name }}</h4>
+  <span class="trash-icon" (click)="deletePhone()"></span>
+</div>
+
+<p>Color:</p>
+<select [value]="color" (change)="patchAttribute('color', $any($event.target)?.value)">
+  <option *ngFor="let option of colorOptions" [value]="option">{{ option }}</option>
+</select>

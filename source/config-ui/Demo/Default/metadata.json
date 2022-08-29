@@ -1,0 +1,10 @@
+{
+  "name": "Default",
+  "type": "CONFIGURATION",
+  "primary": true,
+  "version": 2,
+  "children": ["Bundle"],
+  "properties": {
+    "rootType": "Bundle"
+  }
+}

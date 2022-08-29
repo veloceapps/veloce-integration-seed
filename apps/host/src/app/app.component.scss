@@ -1,0 +1,31 @@
+@import '../styles/variables.scss';
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 1064px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.router-wrapper {
+  position: relative;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+:host ::ng-deep vl-flow-debug {
+  display: block;
+  max-width: $maxWidth;
+  padding: 20px 56px;
+  margin: 0 auto;
+}

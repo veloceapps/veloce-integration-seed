@@ -35,6 +35,7 @@
     "strictNullInputTypes": false
   },
   "exclude": [
-    "server/"
+    "node_modules",
+    "server"
   ]
 }

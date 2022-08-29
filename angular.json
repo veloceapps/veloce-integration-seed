@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ui": {
+    "host": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -14,23 +14,27 @@
         }
       },
       "root": "",
-      "sourceRoot": "src",
-      "prefix": "app",
+      "sourceRoot": "apps/host/src",
+      "prefix": "hst",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "aot": false,
-            "outputPath": "dist/ui",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/host",
+            "index": "apps/host/src/index.html",
+            "main": "apps/host/src/main.ts",
+            "polyfills": "apps/host/src/polyfills.ts",
+            "tsConfig": "apps/host/tsconfig.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "assets": ["apps/host/src/favicon.ico", "apps/host/src/assets"],
+            "styles": ["apps/host/src/styles.scss"],
             "scripts": [],
-            "allowedCommonJsDependencies": ["@aws-crypto/sha256-browser", "@veloce/core", "dragula"]
+            "allowedCommonJsDependencies": ["@aws-crypto/sha256-browser", "@veloce/core", "dragula"],
+            "customWebpackConfig": {
+              "path": "apps/host/webpack.config.js",
+              "replaceDuplicatePlugins": true
+            }
           },
           "configurations": {
             "production": {
@@ -48,8 +52,8 @@
               ],
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "apps/host/src/environments/environment.ts",
+                  "with": "apps/host/src/environments/environment.prod.ts"
                 }
               ],
               "outputHashing": "all"
@@ -66,42 +70,130 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ui:build:production"
+              "browserTarget": "host:build:production"
             },
             "development": {
-              "browserTarget": "ui:build:development"
+              "browserTarget": "host:build:development"
             }
           },
           "options": {
-            "browserTarget": "ui:build",
-            "proxyConfig": "src/proxy.conf.json"
+            "browserTarget": "host:build",
+            "proxyConfig": "apps/host/proxy.conf.json",
+            "port": 4202
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    },
+    "demo": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "apps/demo",
+      "sourceRoot": "apps/demo/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "outputPath": "dist/demo",
+            "index": "apps/demo/src/index.html",
+            "main": "apps/demo/src/main.ts",
+            "polyfills": "apps/demo/src/polyfills.ts",
+            "tsConfig": "apps/demo/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": ["apps/demo/src/favicon.ico", "apps/demo/src/assets"],
+            "styles": ["apps/demo/src/styles.scss"],
+            "scripts": [],
+            "customWebpackConfig": {
+              "path": "apps/demo/webpack.config.js",
+              "replaceDuplicatePlugins": true
+            }
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/demo/src/environments/environment.ts",
+                  "with": "apps/demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all",
+              "customWebpackConfig": {
+                "path": "apps/demo/webpack.prod.config.js",
+                "replaceDuplicatePlugins": true
+              }
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "demo:build:production"
+            },
+            "development": {
+              "browserTarget": "demo:build:development"
+            }
+          },
+          "options": {
+            "browserTarget": "host:build",
+            "proxyConfig": "apps/host/proxy.conf.json",
+            "port": 4203
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ui:build"
+            "browserTarget": "demo:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
+            "main": "apps/demo/src/test.ts",
+            "polyfills": "apps/demo/src/polyfills.ts",
+            "tsConfig": "apps/demo/tsconfig.spec.json",
+            "karmaConfig": "apps/demo/karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "assets": ["apps/demo/src/favicon.ico", "apps/demo/src/assets"],
+            "styles": ["apps/demo/src/styles.scss"],
             "scripts": []
           }
         }
       }
     }
   },
-  "defaultProject": "ui"
+  "defaultProject": "host"
 }

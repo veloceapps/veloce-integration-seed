@@ -1,0 +1,19 @@
+@import '../../../../../styles/variables.scss';
+
+:host {
+  display: block;
+  height: 100%;
+  max-width: $maxWidth;
+  margin: 0 auto;
+  padding: $pageContainerPadding;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+vl-card {
+  width: calc(25% - 15px);
+}
