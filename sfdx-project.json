@@ -1,0 +1,12 @@
+{
+  "packageDirectories": [
+    {
+      "path": "meta",
+      "default": true
+    }
+  ],
+  "name": "veloce-integration",
+  "namespace": "",
+  "sfdcLoginUrl": "https://test.salesforce.com",
+  "sourceApiVersion": "53.0"
+}
