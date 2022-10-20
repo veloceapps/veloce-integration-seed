@@ -5,10 +5,6 @@
     "rootDir": "./",
     "esModuleInterop": true
   },
-  "files": [
-    "server.ts",
-  ],
-  "include": [
-    "**/*.d.ts"
-  ]
+  "files": ["server.ts"],
+  "include": ["**/*.d.ts"]
 }

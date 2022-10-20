@@ -1,4 +1,5 @@
-import { UIDefinition, UIElement, UIElementMetadata } from '@veloce/sdk/cms';
+import { ElementDefaultMetadata } from '@veloce/sdk/cms';
+import { UIDefinition, UIElement } from '@veloce/sdk/core';
 import { existsSync } from 'fs';
 import { getDirectoryNames, readFileSafe, toBase64 } from '../utils/common.utils';
 import { extractElementMetadata } from './definition-builder.utils';
@@ -7,10 +8,10 @@ import { typeValidator } from './validators';
 export class DefinitionBuilder {
   private readonly definitionValidators: Function[] = [typeValidator];
   private readonly elementValidators: Function[] = [typeValidator];
-  private readonly rootPath: string = 'data';
+  private readonly rootPath: string = 'source';
 
   constructor(instance: string) {
-    this.rootPath = `data/${instance}`;
+    this.rootPath = `source/${instance}`;
   }
 
   async buildSingle(relativePath: string): Promise<UIDefinition> {
@@ -18,7 +19,7 @@ export class DefinitionBuilder {
   }
 
   async buildMultiple(relativePath: string): Promise<UIDefinition[]> {
-    const result = [];
+    const result: UIDefinition[] = [];
     const definitions = await getDirectoryNames(`${this.rootPath}/${relativePath}`);
 
     for (const definition of definitions) {
@@ -46,7 +47,7 @@ export class DefinitionBuilder {
 
     return {
       ...definition,
-      children
+      children,
     };
   }
 
@@ -70,7 +71,7 @@ export class DefinitionBuilder {
       children,
       template: toBase64(template),
       script: toBase64(script),
-      styles: toBase64(styles)
+      styles: toBase64(styles),
     } as UIElement;
 
     this.validateElement(path, metadata);
@@ -81,7 +82,7 @@ export class DefinitionBuilder {
 
     return {
       ...element,
-      children
+      children,
     };
   }
 
@@ -91,7 +92,7 @@ export class DefinitionBuilder {
     });
   }
 
-  private validateElement(path: string, element: UIElementMetadata): void {
+  private validateElement(path: string, element: ElementDefaultMetadata): void {
     this.elementValidators.forEach(validator => {
       validator.apply(null, [path, element]);
     });

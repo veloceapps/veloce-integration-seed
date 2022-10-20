@@ -1,5 +1,4 @@
-import { UIElementModel } from '@veloce/sdk/cms';
-import { ELEMENT_TYPE } from '@veloce/sdk/cms/types/common.types';
+import { ElementModel, ELEMENT_TYPE } from '@veloce/sdk/cms';
 import { Dictionary } from 'lodash';
 
 export interface HttpError {
@@ -14,5 +13,5 @@ export interface Metadata {
   children: string[];
   inputs: Dictionary<string>;
   outputs: Dictionary<string>;
-  model: UIElementModel;
+  model: ElementModel;
 }

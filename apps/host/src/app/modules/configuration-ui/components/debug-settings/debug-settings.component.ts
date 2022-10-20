@@ -11,12 +11,12 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
+import { FlowsApiService } from '@veloce/api';
 import { FormErrorMessagesService } from '@veloce/components';
-import { FlowService } from '@veloce/sdk';
 import { ConfigurationUiActions } from 'apps/host/src/app/state/configuration-ui/configuration-ui.actions';
 import { Dictionary } from 'lodash';
 import { BehaviorSubject, map, Subject, takeUntil, tap } from 'rxjs';
-import { ConfigUiCard, DebugSettings, FlowProperties } from '../../configuration-ui.types';
+import { ConfigUiCard, DebugObjectName, DebugSettings, FlowProperties } from '../../configuration-ui.types';
 
 @Component({
   selector: 'app-debug-settings',
@@ -26,6 +26,8 @@ import { ConfigUiCard, DebugSettings, FlowProperties } from '../../configuration
   providers: [FormErrorMessagesService],
 })
 export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
+  public readonly objectNames: DebugObjectName[] = ['Account', 'Quote', 'Order'];
+  private readonly defaultObjectName: DebugObjectName = 'Quote';
   private readonly productFlowEntryPaths = ['/product', '/legacy/product'];
 
   @Input() card?: ConfigUiCard;
@@ -37,6 +39,7 @@ export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
   public formControls = {
     id: new FormControl(null, Validators.required),
+    name: new FormControl(this.defaultObjectName),
     debugMode: new FormControl(false),
     flowId: new FormControl(null, Validators.required),
   };
@@ -49,7 +52,7 @@ export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
   destroy$ = new Subject<void>();
 
-  constructor(private flowsApiService: FlowService, private store: Store) {
+  constructor(private flowsApiService: FlowsApiService, private store: Store) {
     this.fetchFlows();
   }
 
@@ -101,6 +104,7 @@ export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
   private initForm(card?: ConfigUiCard): void {
     this.form.reset({
       id: card?.debugSettings?.objectId,
+      name: card?.debugSettings?.objectName ?? this.defaultObjectName,
       debugMode: !!card?.debugSettings,
       flowId: card?.debugSettings?.flow.id,
     });
@@ -118,6 +122,7 @@ export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
         ? {
             flow,
             objectId: this.formControls.id.value,
+            objectName: this.formControls.name.value,
           }
         : undefined;
 

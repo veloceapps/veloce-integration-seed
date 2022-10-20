@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Params } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { getFlowObjectIdPropertyName } from '@veloce/sdk';
 import { ModelsApiService } from 'apps/host/src/app/services/models.service';
 import { ConfigurationUiState } from 'apps/host/src/app/state/configuration-ui/configuration-ui.state';
 import { Dictionary } from 'lodash';
@@ -75,9 +76,10 @@ export class ConfigurationUiComponent implements OnInit, OnDestroy {
       };
     }
 
+    const objectPropertyName = getFlowObjectIdPropertyName(settings.objectName);
     const queryParams: Params = {
       flowId: settings.flow.id,
-      quoteId: settings.objectId,
+      [objectPropertyName]: settings.objectId,
       ...settings.flow.queryParams,
     };
 

@@ -1,5 +1,6 @@
 import { QuoteApiService } from '@veloce/api';
-import { ConfigurationService, ElementDefinition, ScriptHost, TypeElement } from '@veloce/sdk/cms';
+import { ElementDefinition, ScriptHost, TypeElement } from '@veloce/sdk/cms';
+import { ConfigurationService } from '@veloce/sdk/core';
 
 interface HostContent extends TypeElement {
   data: {
