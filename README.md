@@ -52,8 +52,17 @@ npm run auth
 By default it will authorize `studio-dev` org, but any other org can be specified this way:
 
 ```bash
-npm run auth u=studio-qa
+npm run auth -- -u studio-qa
 ```
+
+This will create `local/auth.json` file with token and proxy configuration.
+
+### Dev token
+
+There are two options for providing Dev session token:
+
+1. Add `window.DEV_TOKEN` (in apps/host/src/index.html) with said token
+2. Add `devToken` property to the `local/auth.json` file
 
 ### Start DEMO configuration application:
 
