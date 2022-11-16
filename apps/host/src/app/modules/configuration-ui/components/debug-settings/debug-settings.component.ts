@@ -16,7 +16,7 @@ import { FormErrorMessagesService } from '@veloce/components';
 import { ConfigurationUiActions } from 'apps/host/src/app/state/configuration-ui/configuration-ui.actions';
 import { Dictionary } from 'lodash';
 import { BehaviorSubject, map, Subject, takeUntil, tap } from 'rxjs';
-import { ConfigUiCard, DebugObjectName, DebugSettings, FlowProperties } from '../../configuration-ui.types';
+import { ConfigUiCard, DebugSettings, FlowProperties } from '../../configuration-ui.types';
 
 @Component({
   selector: 'app-debug-settings',
@@ -26,8 +26,6 @@ import { ConfigUiCard, DebugObjectName, DebugSettings, FlowProperties } from '..
   providers: [FormErrorMessagesService],
 })
 export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
-  public readonly objectNames: DebugObjectName[] = ['Account', 'Quote', 'Order'];
-  private readonly defaultObjectName: DebugObjectName = 'Quote';
   private readonly productFlowEntryPaths = ['/product', '/legacy/product'];
 
   @Input() card?: ConfigUiCard;
@@ -39,7 +37,6 @@ export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
   public formControls = {
     id: new FormControl(null, Validators.required),
-    name: new FormControl(this.defaultObjectName),
     debugMode: new FormControl(false),
     flowId: new FormControl(null, Validators.required),
   };
@@ -104,7 +101,6 @@ export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
   private initForm(card?: ConfigUiCard): void {
     this.form.reset({
       id: card?.debugSettings?.objectId,
-      name: card?.debugSettings?.objectName ?? this.defaultObjectName,
       debugMode: !!card?.debugSettings,
       flowId: card?.debugSettings?.flow.id,
     });
@@ -122,7 +118,6 @@ export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
         ? {
             flow,
             objectId: this.formControls.id.value,
-            objectName: this.formControls.name.value,
           }
         : undefined;
 

@@ -15,6 +15,7 @@ module.exports = {
         '@angular/common': { singleton: true, eager: true, requiredVersion: 'auto' },
         '@angular/core': { singleton: true, eager: true, requiredVersion: 'auto' },
         '@angular/forms': { singleton: true, eager: true, requiredVersion: 'auto' },
+        '@angular/platform-browser': { singleton: true, eager: true, requiredVersion: 'auto' },
         rxjs: { singleton: true, eager: true, requiredVersion: 'auto' },
       },
     }),

@@ -76,7 +76,7 @@ export class ConfigurationUiComponent implements OnInit, OnDestroy {
       };
     }
 
-    const objectPropertyName = getFlowObjectIdPropertyName(settings.objectName);
+    const objectPropertyName = getFlowObjectIdPropertyName(settings.objectId);
     const queryParams: Params = {
       flowId: settings.flow.id,
       [objectPropertyName]: settings.objectId,

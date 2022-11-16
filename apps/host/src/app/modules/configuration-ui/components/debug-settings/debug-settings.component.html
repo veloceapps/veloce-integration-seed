@@ -33,16 +33,6 @@
           <input [formControl]="formControls.id" pInputText type="text" />
           <vl-control-error-message [control]="formControls.id" [controlLabel]="labels.id"></vl-control-error-message>
         </div>
-
-        <div class="field">
-          <label>SF Object Name</label>
-          <p-dropdown
-            appendTo="body"
-            formControlName="name"
-            [autoDisplayFirst]="false"
-            [options]="objectNames"
-          ></p-dropdown>
-        </div>
       </div>
 
       <div class="field w-full">
