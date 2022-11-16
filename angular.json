@@ -27,7 +27,15 @@
             "polyfills": "apps/host/src/polyfills.ts",
             "tsConfig": "apps/host/tsconfig.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["apps/host/src/favicon.ico", "apps/host/src/assets"],
+            "assets": [
+              "apps/host/src/favicon.ico",
+              "apps/host/src/assets",
+              {
+                "glob": "local",
+                "input": "./",
+                "output": "/"
+              }
+            ],
             "styles": ["apps/host/src/styles.scss"],
             "scripts": [],
             "allowedCommonJsDependencies": ["@aws-crypto/sha256-browser", "@veloce/core", "dragula"],
@@ -81,7 +89,7 @@
           },
           "options": {
             "browserTarget": "host:build",
-            "proxyConfig": "apps/host/proxy.conf.json",
+            "proxyConfig": "proxy.conf.js",
             "port": 4202
           },
           "defaultConfiguration": "development"
@@ -168,7 +176,6 @@
           },
           "options": {
             "browserTarget": "host:build",
-            "proxyConfig": "apps/host/proxy.conf.json",
             "port": 4203
           },
           "defaultConfiguration": "development"

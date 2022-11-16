@@ -12,22 +12,22 @@ import { DefinitionModule } from './components/definition/definition.module';
 const routes: Routes = [
   {
     path: '',
-    component: CatalogsComponent,
+    component: CatalogsComponent
   },
   {
     path: ':name',
-    component: CatalogComponent,
+    component: CatalogComponent
   },
   {
     path: ':name/:definition',
-    component: DefinitionComponent,
-  },
+    component: DefinitionComponent
+  }
 ];
 
 @NgModule({
   declarations: [CatalogsComponent],
   imports: [CommonModule, RouterModule.forChild(routes), LoaderModule, CatalogModule, DefinitionModule, CardModule],
   providers: [CatalogsApiService],
-  exports: [CatalogsComponent],
+  exports: [CatalogsComponent]
 })
 export class CatalogsModule {}

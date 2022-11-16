@@ -27,14 +27,6 @@ Install `veloce-sfdx-v3` plugin
 sfdx plugins:install veloce-sfdx-v3
 ```
 
-Setup the app:
-
-- Open browser dev tools and from nine-dot menu launch **Veloce Studio**
-- Copy authorization token from any XHR request
-- Update `window.VELO_KEY` (in `apps/host/src/index.html`) with said token
-- Copy host URL from any XHR request (ex. https://my-org-velo-cpq-dot-spheric-baton-328205.ue.r.appspot.com)
-- Update `target` property of `/services/*` object in `apps/host/src/proxy.conf.json` with said URL
-
 Start the app:
 
 ```
@@ -48,6 +40,29 @@ npm run start
 ```
 sfdx veloce:source:pull -m config-ui:MyProductModel
 ```
+
+### Authorize
+
+Authorize Salesforce org with credentials from LastPass:
+
+```bass
+npm run auth
+```
+
+By default it will authorize `studio-dev` org, but any other org can be specified this way:
+
+```bash
+npm run auth -- -u studio-qa
+```
+
+This will create `local/auth.json` file with token and proxy configuration.
+
+### Dev token
+
+There are two options for providing Dev session token:
+
+1. Add `window.DEV_TOKEN` (in apps/host/src/index.html) with said token
+2. Add `devToken` property to the `local/auth.json` file
 
 ### Start DEMO configuration application:
 

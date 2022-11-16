@@ -1,6 +1,6 @@
 import { getDirectoryNames } from '../utils/common.utils';
 
-const CATALOGS_DIR = 'data/catalogs';
+const CATALOGS_DIR = 'source/catalog';
 
 export const getCatalogsNames = async (): Promise<string[]> => {
   return await getDirectoryNames(CATALOGS_DIR);

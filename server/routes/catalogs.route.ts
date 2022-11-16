@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
+import { DefinitionBuilder } from '../definition-builder';
 import { getCatalogDefinitions, getCatalogsNames } from '../services/catalogs.service';
 import { HttpError } from '../types/common.types';
-import { DefinitionBuilder } from '../definition-builder';
 
 const router = express.Router();
-const definitionBuilder = new DefinitionBuilder('catalogs');
+const definitionBuilder = new DefinitionBuilder('catalog');
 
 router.get('/', async (req: Request, res: Response) => {
   try {

@@ -1,5 +1,11 @@
 import { existsSync, promises as fs } from 'fs';
-import { Template, TemplateComponent, TemplateComponentStory } from '../types/templates.types';
+import {
+  Template,
+  TemplateComponent,
+  TemplateComponentInfo,
+  TemplateComponentMeta,
+  TemplateComponentStory,
+} from '../types/templates.types';
 
 const TEMPLATES_DIR = 'data/templates';
 const STORIES_DIR = 'stories';
@@ -39,7 +45,9 @@ export const getTemplates = async (): Promise<Template[]> => {
   const templates = await getDirectoryNames(TEMPLATES_DIR);
 
   for (const [i, templateName] of templates.entries()) {
-    const template: Template = { name: templateName, components: [] };
+    const templateMetadataRaw = await readFileSafe(`${TEMPLATES_DIR}/${templateName}/metadata.json`);
+    const templateMetadata = JSON.parse(templateMetadataRaw);
+    const template: Template = { name: templateName, type: templateMetadata.type, components: [] };
 
     const components = await getComponents(templateName);
     for (const [j, componentName] of components.entries()) {
@@ -54,10 +62,36 @@ export const getTemplates = async (): Promise<Template[]> => {
   return result;
 };
 
+export const getTemplateComponents = async (templateName: string): Promise<TemplateComponentMeta[]> => {
+  const componentNames = await getComponents(templateName);
+  return Promise.all(
+    componentNames.map(async componentName => {
+      const componentDir = `${TEMPLATES_DIR}/${templateName}/${componentName}`;
+
+      const infoRaw = await readFileSafe(`${componentDir}/metadata.json`);
+      const componentTemplate = await readFileSafe(`${componentDir}/template.html`);
+      const componentStyles = await readFileSafe(`${componentDir}/styles.css`);
+      const componentTsScript = await readFileSafe(`${componentDir}/script.ts`);
+      const componentJsScript = await readFileSafe(`${componentDir}/script.js`);
+      const componentProperties = await readFileSafe(`${componentDir}/properties.json`);
+
+      const info = JSON.parse(infoRaw) as TemplateComponentInfo;
+      const meta: TemplateComponentMeta = {
+        ...info,
+        template: componentTemplate,
+        styles: componentStyles,
+        script: componentTsScript || componentJsScript,
+        properties: componentProperties,
+      };
+      return meta;
+    }),
+  );
+};
+
 export const getStoryMetadata = async (
   templateName: string,
   componentName: string,
-  storyName: string
+  storyName: string,
 ): Promise<TemplateComponentStory> => {
   const componentDir = `${TEMPLATES_DIR}/${templateName}/${componentName}`;
   const storyDir = `${componentDir}/${STORIES_DIR}/${storyName}`;
@@ -80,6 +114,6 @@ export const getStoryMetadata = async (
     template,
     styles,
     script,
-    section
+    section,
   };
 };

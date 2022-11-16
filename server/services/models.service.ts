@@ -20,7 +20,7 @@ export const getCompiledModelDefinitions = async (modelName: string): Promise<UI
     return await definitionBuilder.buildMultiple(modelName);
   }
 
-  const rawResponse = await exec(`sfdx veloce:source:pack -m config-ui:${modelName} --json`);
+  const rawResponse = await exec(`sfdx veloce:source:pack -m config-ui:"${modelName}" --json`);
 
   try {
     const response: { result: UIDef[] } = rawResponse ? JSON.parse(rawResponse) : { result: [] };

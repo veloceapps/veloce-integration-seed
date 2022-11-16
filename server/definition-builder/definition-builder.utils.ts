@@ -1,8 +1,8 @@
-import { UIElementMetadata } from '@veloce/sdk/cms';
+import { ElementDefaultMetadata } from '@veloce/sdk/cms';
 
 const METADATA_DECORATOR_REGEX = /@ElementDefinition\(([\s\S]+)\)(\n|.)*export class/g;
 
-export const extractElementMetadata = (script: string): UIElementMetadata | undefined => {
+export const extractElementMetadata = (script: string): ElementDefaultMetadata | undefined => {
   const parsed = METADATA_DECORATOR_REGEX.exec(script);
 
   if (!parsed) {

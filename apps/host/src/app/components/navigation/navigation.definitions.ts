@@ -6,19 +6,19 @@ export const navigationItems: MenuItem[] = [
     icon: 'icon ion-md-cube',
     routerLink: '/configuration-ui',
   },
-  // {
-  //   label: 'Catalogs',
-  //   icon: 'icon ion-md-filing',
-  //   routerLink: '/catalogs',
-  // },
+  {
+    label: 'Catalogs',
+    icon: 'icon ion-md-filing',
+    routerLink: '/catalogs',
+  },
   // {
   //   label: 'Templates',
   //   icon: 'icon ion-md-today',
   //   routerLink: '/templates',
   // },
-  // {
-  //   label: 'Flow debug',
-  //   icon: 'icon ion-md-bug',
-  //   routerLink: '/flow/debug',
-  // },
+  {
+    label: 'Flow debug',
+    icon: 'icon ion-md-bug',
+    routerLink: '/flow/debug',
+  },
 ];
