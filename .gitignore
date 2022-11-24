@@ -41,6 +41,7 @@ testem.log
 /typings
 bin/
 local/*
+!local/.gitkeep
 
 # System Files
 .DS_Store
