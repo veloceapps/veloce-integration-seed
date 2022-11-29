@@ -50,7 +50,7 @@ export const getFileNames = async (dir: string): Promise<string[]> => {
 
 export const exec = (cmd: string): Promise<string> => {
   return new Promise((resolve, reject) => {
-    nodeExec(cmd, (error, result) => {
+    nodeExec(cmd, { maxBuffer: 1024 * 5000 }, (error, result) => {
       if (error) {
         reject(error.message);
       } else {
