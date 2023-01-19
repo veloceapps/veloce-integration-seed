@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { LineItem } from '@veloce/core';
-import { LineItemWorker } from '@veloce/sdk/core';
+import { LineItem } from '@veloceapps/core';
+import { LineItemWorker } from '@veloceapps/sdk/core';
 import { ConfigurationService } from '../services/configuration.service';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SalesforceApiService } from '@veloce/api';
+import { SalesforceApiService } from '@veloceapps/api';
 import {
   Expression,
   Operator,
@@ -7,9 +7,9 @@ import {
   TemplateComponentWithAttachments,
   UIDefinition as LegacyUIDefinition,
   UITemplateType,
-} from '@veloce/core';
-import { FlowCustomization } from '@veloce/sdk';
-import { UIDefinition } from '@veloce/sdk/core';
+} from '@veloceapps/core';
+import { FlowCustomization } from '@veloceapps/sdk';
+import { UIDefinition } from '@veloceapps/sdk/core';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { TemplateComponentMeta } from '../types/templates.types';
 import { isLegacyDefinition } from '../utils/ui.utils';

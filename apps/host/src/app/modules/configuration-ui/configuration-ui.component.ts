@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Params } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { getFlowObjectIdPropertyName } from '@veloce/sdk';
+import { getFlowObjectIdPropertyName } from '@veloceapps/sdk';
 import { ModelsApiService } from 'apps/host/src/app/services/models.service';
 import { ConfigurationUiState } from 'apps/host/src/app/state/configuration-ui/configuration-ui.state';
 import { Dictionary } from 'lodash';

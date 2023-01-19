@@ -1,4 +1,4 @@
-import { ElementDefaultMetadata } from '@veloce/sdk/cms';
+import { ElementDefaultMetadata } from '@veloceapps/sdk/cms';
 
 const METADATA_DECORATOR_REGEX = /@ElementDefinition\(([\s\S]+)\)(\n|.)*export class/g;
 

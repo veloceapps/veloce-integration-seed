@@ -1,0 +1,3 @@
+<select [value]="value$ | async" (change)="patch($event.target.value)">
+  <option *ngFor="let option of (options$ | async)" [value]="option">{{option}}</option>
+</select>

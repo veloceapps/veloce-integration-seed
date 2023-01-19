@@ -1,0 +1,10 @@
+<div class="port-header">
+  <span class="title">Accessories</span>
+  <div class="add-item">
+    <span class="add-btn">+</span>
+    <div class="add-content">
+      <div class="add-option" *ngFor="let dn of domainsNames$ | async" (click)="addPortItem(dn)">{{ dn }}</div>
+    </div>
+  </div>
+</div>
+<element-children></element-children>

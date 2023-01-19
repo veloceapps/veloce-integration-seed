@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { LetDirectiveModule, LoaderModule } from '@veloce/components';
-import { LauncherModule, PreviewModule } from '@veloce/sdk/cms';
-import { RuntimeModule } from '@veloce/sdk/runtime';
+import { LetDirectiveModule, LoaderModule } from '@veloceapps/components';
+import { LauncherModule, PreviewModule } from '@veloceapps/sdk/cms';
+import { RuntimeModule } from '@veloceapps/sdk/runtime';
 import { DefinitionComponent } from './definition.component';
 
 @NgModule({

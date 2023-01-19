@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UIDefinition } from '@veloce/sdk/core';
+import { UIDefinition } from '@veloceapps/sdk/core';
 import { CatalogsApiService } from 'apps/host/src/app/services/catalogs.service';
 import { Observable, of, shareReplay, switchMap } from 'rxjs';
 

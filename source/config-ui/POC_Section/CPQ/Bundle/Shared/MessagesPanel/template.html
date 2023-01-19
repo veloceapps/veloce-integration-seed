@@ -1,0 +1,46 @@
+<ng-template customTemplate="MessagesPanel">
+  <div class="messages-container" *ngIf="(approvalsEnabled | async) === 'true'">
+    <div class="messages" *ngIf="(uniqueMessages$ | async)?.length">
+      <ng-container
+        [ngTemplateOutlet]="messages"
+        [ngTemplateOutletContext]="{messages: uniqueMessages$ | async, selectedMessage: selectedMessage$ | async, selectedIndex: selectedMessageIndex$ | async}"
+      ></ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #messages let-messages="messages" let-selectedMessage="selectedMessage" let-selectedIndex="selectedIndex">
+  <div class="reason">{{ selectedMessage }}</div>
+
+  <ng-container
+    [ngTemplateOutlet]="messagesCounter"
+    [ngTemplateOutletContext]="{selectedIndex: selectedIndex, backEnabled: selectedIndex > 0, nextEnabled: selectedIndex < (messages.length - 1)}"
+  ></ng-container>
+
+  <ng-template
+    #messagesCounter
+    let-selectedIndex="selectedIndex"
+    let-backEnabled="backEnabled"
+    let-nextEnabled="nextEnabled"
+  >
+    <div class="counter">
+      <span
+        class="icon"
+        [class.disabled]="!backEnabled"
+        (click)="backEnabled && selectedMessageIndex$.next(selectedIndex - 1)"
+      >
+        <span class="arrow-left"></span>
+      </span>
+
+      <span>{{ selectedIndex + 1 }} / {{ messages.length }}</span>
+
+      <span
+        class="icon"
+        [class.disabled]="!nextEnabled"
+        (click)="nextEnabled && selectedMessageIndex$.next(selectedIndex + 1)"
+      >
+        <span class="arrow-right"></span>
+      </span>
+    </div>
+  </ng-template>
+</ng-template>

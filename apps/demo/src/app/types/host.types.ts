@@ -1,5 +1,5 @@
-import { QuoteApiService } from '@veloce/api';
-import { ConfigurationService } from '@veloce/sdk/core';
+import { QuoteApiService } from '@veloceapps/api';
+import { ConfigurationService } from '@veloceapps/sdk/core';
 
 export interface HostContext {
   configurationService: ConfigurationService;

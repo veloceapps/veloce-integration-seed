@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { LineItem, RuntimeModel } from '@veloce/core';
-import { ConfigurationService as VeloceConfigurationService, RuntimeContext } from '@veloce/sdk/core';
+import { LineItem, RuntimeModel } from '@veloceapps/core';
+import { ConfigurationService as VeloceConfigurationService, RuntimeContext } from '@veloceapps/sdk/core';
 import { Observable } from 'rxjs';
 
 @Injectable()

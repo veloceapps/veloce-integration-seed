@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { FlowsApiService } from '@veloce/api';
-import { FormErrorMessagesService } from '@veloce/components';
+import { FlowsApiService } from '@veloceapps/api';
+import { FormErrorMessagesService } from '@veloceapps/components';
 import { ConfigurationUiActions } from 'apps/host/src/app/state/configuration-ui/configuration-ui.actions';
 import { Dictionary } from 'lodash';
 import { BehaviorSubject, map, Subject, takeUntil, tap } from 'rxjs';

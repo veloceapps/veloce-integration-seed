@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ComponentStoryPreview } from '@veloce/core';
+import { ComponentStoryPreview } from '@veloceapps/core';
 import { map, Observable, of, switchMap } from 'rxjs';
 import { TemplatesApiService } from '../../../services/templates.service';
 
@@ -8,7 +8,7 @@ import { TemplatesApiService } from '../../../services/templates.service';
   selector: 'app-template-story-component',
   templateUrl: 'template-story.component.html',
   styleUrls: ['template-story.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TemplateStoryComponent {
   public story$: Observable<ComponentStoryPreview | undefined>;
@@ -32,9 +32,9 @@ export class TemplateStoryComponent {
         return {
           ...data,
           id: '',
-          uiComponentId: ''
+          uiComponentId: '',
         };
-      })
+      }),
     );
   }
 }

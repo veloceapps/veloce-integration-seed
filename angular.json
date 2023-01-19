@@ -38,7 +38,7 @@
             ],
             "styles": ["apps/host/src/styles.scss"],
             "scripts": [],
-            "allowedCommonJsDependencies": ["@aws-crypto/sha256-browser", "@veloce/core", "dragula"],
+            "allowedCommonJsDependencies": ["@aws-crypto/sha256-browser", "@veloceapps/core", "dragula"],
             "customWebpackConfig": {
               "path": "apps/host/webpack.config.js",
               "replaceDuplicatePlugins": true

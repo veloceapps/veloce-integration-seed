@@ -1,4 +1,4 @@
-import { UITemplateComponentType, UITemplateType } from '@veloce/core';
+import { UITemplateComponentType, UITemplateType } from '@veloceapps/core';
 
 export interface Template {
   name: string;

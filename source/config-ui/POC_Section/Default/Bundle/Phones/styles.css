@@ -1,0 +1,62 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  margin: 10px 10px;
+}
+
+.port-header {
+  display: flex;
+  align-items: center;
+}
+
+.port-header .title {
+  color: var(--vl-primary-color);
+}
+
+.add-item {
+  display: flex;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.add-btn {
+  color: #fff;
+  margin: 0 6px;
+  padding: 2px;
+  background-color: var(--vl-primary-color);
+  width: 18px;
+  border-radius: 9px;
+  text-align: center;
+}
+
+.add-content {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: 5px;
+  z-index: 10;
+  background: #fff;
+  border: 1px solid var(--vl-primary-color);
+  box-shadow: 0px 0px 20px rgba(39, 103, 193, 0.2);
+  border-radius: 3px;
+}
+
+.add-option {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.add-option:hover {
+  background: var(--vl-menu-item-active-background);
+}
+
+.add-item:hover .add-content {
+  display: block;
+}
+
+.phones-wrapper {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}

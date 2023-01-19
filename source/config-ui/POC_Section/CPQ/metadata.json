@@ -1,0 +1,15 @@
+{
+  "name": "CPQ",
+  "primary": true,
+  "type": "CONFIGURATION",
+  "version": 2,
+  "createdTimestamp": 1658393848274,
+  "properties": {
+    "rootType": "Bundle",
+    "pricingEnabled": false,
+    "priceList": null
+  },
+  "children": [
+    "Bundle"
+  ]
+}

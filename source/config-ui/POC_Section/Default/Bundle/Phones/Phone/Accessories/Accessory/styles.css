@@ -1,0 +1,28 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+  padding: 10px 10px;
+  border: 1px solid var(--vl-border-color);
+}
+
+.type-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.remove-btn {
+  margin: 0 6px;
+  padding: 2px;
+  background-color: #fff;
+  width: 22px;
+  font-size: 14px;
+  border-radius: 9px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background-color: var(--vl-menu-item-active-background);
+}

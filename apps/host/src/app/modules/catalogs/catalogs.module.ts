@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CardModule, LoaderModule } from '@veloce/components';
+import { CardModule, LoaderModule } from '@veloceapps/components';
 import { CatalogsApiService } from '../../services/catalogs.service';
 import { CatalogsComponent } from './catalogs.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
@@ -12,22 +12,22 @@ import { DefinitionModule } from './components/definition/definition.module';
 const routes: Routes = [
   {
     path: '',
-    component: CatalogsComponent
+    component: CatalogsComponent,
   },
   {
     path: ':name',
-    component: CatalogComponent
+    component: CatalogComponent,
   },
   {
     path: ':name/:definition',
-    component: DefinitionComponent
-  }
+    component: DefinitionComponent,
+  },
 ];
 
 @NgModule({
   declarations: [CatalogsComponent],
   imports: [CommonModule, RouterModule.forChild(routes), LoaderModule, CatalogModule, DefinitionModule, CardModule],
   providers: [CatalogsApiService],
-  exports: [CatalogsComponent]
+  exports: [CatalogsComponent],
 })
 export class CatalogsModule {}

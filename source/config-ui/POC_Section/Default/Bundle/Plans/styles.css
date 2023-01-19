@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  margin: 10px 10px;
+}
+
+.port-header {
+  display: flex;
+  align-items: center;
+}
+
+.port-header .title {
+  color: var(--vl-primary-color);
+}
+
+.add-item {
+  color: #fff;
+  margin: 0 6px;
+  padding: 2px;
+  cursor: pointer;
+  background-color: var(--vl-primary-color);
+  width: 18px;
+  border-radius: 9px;
+  text-align: center;
+}

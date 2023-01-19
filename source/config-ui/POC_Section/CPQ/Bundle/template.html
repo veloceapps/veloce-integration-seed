@@ -1,0 +1,47 @@
+<ng-container [ngTemplateOutlet]="templatesService.get('MessagesPanel')"></ng-container>
+
+<div class="content-wrapper">
+  <ng-container *ngIf="tabs?.length > 1">
+    <div class="tabs" *ngIf="(activeTab | async) as active">
+      <div class="tab" *ngFor="let tab of tabs" [class.active]="tab.name === active.name" (click)="activeTab.next(tab)">
+        {{ tab.name }}
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="content">
+    <element-children class="children-wrapper"></element-children>
+  </div>
+
+  <div class="footer">
+    <div class="metrics" *ngIf="pricingEnabled">
+      <span class="metric"> Total Recurring Revenue <strong> {{ totalRecurring$ | async }} </strong> </span>
+      <span class="metric"> Total Non-Recurring Revenue <strong> {{ totalNonRecurring$ | async }} </strong> </span>
+    </div>
+
+    <div class="actions">
+      <ng-container *ngIf="isStandalone; else flowButtons">
+        <button *ngIf="(docgenEnabled | async) === 'true'" class="secondary" (click)="docgenHandler()">
+          Generate Doc
+        </button>
+
+        <button class="secondary" (click)="cancelHandler()">Cancel</button>
+
+        <button (click)="saveHandler()" [class.disabled]="saveInProgress$ | async">
+          <div class="spinner" *ngIf="saveInProgress$ | async"></div>
+          Save
+        </button>
+
+        <button (click)="submitHandler()" [class.disabled]="submitInProgress$ | async">
+          <div class="spinner" *ngIf="submitInProgress$ | async"></div>
+          Submit
+        </button>
+      </ng-container>
+
+      <ng-template #flowButtons>
+        <button class="secondary" (click)="flowCancelHandler()">Cancel</button>
+        <button (click)="flowApplyHandler()">Add to Cart</button>
+      </ng-template>
+    </div>
+  </div>
+</div>

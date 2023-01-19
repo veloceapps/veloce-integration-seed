@@ -1,0 +1,7 @@
+<div *ngIf="model$ | async as model">
+  <div class="type-header">
+    <strong>{{ model.name }}</strong>
+    <span class="icon ion-ios-trash remove-btn" (click)="remove(model.id)"></span>
+  </div>
+  <element-children></element-children>
+</div>

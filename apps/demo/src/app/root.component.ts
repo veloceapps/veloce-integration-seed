@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { QuoteApiService } from '@veloce/api';
-import { LineItem } from '@veloce/core';
-import { generateLineItem, LineItemWorker } from '@veloce/sdk/core';
+import { QuoteApiService } from '@veloceapps/api';
+import { LineItem } from '@veloceapps/core';
+import { generateLineItem, LineItemWorker } from '@veloceapps/sdk/core';
 import { map, Observable, of, switchMap } from 'rxjs';
 import { ConfigurationService } from './services/configuration.service';
 import { HostContext } from './types/host.types';

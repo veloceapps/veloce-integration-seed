@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CardModule, LoaderModule } from '@veloce/components';
-import { FlowModule } from '@veloce/sdk';
+import { CardModule, LoaderModule } from '@veloceapps/components';
+import { FlowModule } from '@veloceapps/sdk';
 import { DebugSettingsModule } from './components/debug-settings/debug-settings.module';
 import { DefinitionComponent } from './components/definition/definition.component';
 import { DefinitionModule } from './components/definition/definition.module';

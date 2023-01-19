@@ -24,7 +24,7 @@
     ],
     "paths": {
       "@angular/*": [ "node_modules/@angular/*" ],
-      "@veloce/*": [ "node_modules/@veloce/*" ],
+      "@veloceapps/*": [ "node_modules/@veloceapps/*" ],
       "ngx-bootstrap/*": [ "node_modules/ngx-bootstrap/*" ]
     }
   },

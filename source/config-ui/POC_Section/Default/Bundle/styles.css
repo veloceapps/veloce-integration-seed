@@ -1,0 +1,12 @@
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px;
+  border: 1px solid var(--vl-border-color);
+  overflow: auto;
+}
+
+:host ::ng-deep * {
+  box-sizing: border-box;
+}

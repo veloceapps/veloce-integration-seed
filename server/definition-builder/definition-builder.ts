@@ -1,5 +1,5 @@
-import { ElementDefaultMetadata } from '@veloce/sdk/cms';
-import { UIDefinition, UIElement } from '@veloce/sdk/core';
+import { ElementDefaultMetadata } from '@veloceapps/sdk/cms';
+import { UIDefinition, UIElement } from '@veloceapps/sdk/core';
 import { existsSync } from 'fs';
 import { getDirectoryNames, readFileSafe, toBase64 } from '../utils/common.utils';
 import { extractElementMetadata } from './definition-builder.utils';

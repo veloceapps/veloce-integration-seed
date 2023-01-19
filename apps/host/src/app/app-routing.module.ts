@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FlowModule } from '@veloce/sdk';
+import { FlowModule } from '@veloceapps/sdk';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'configuration-ui' },

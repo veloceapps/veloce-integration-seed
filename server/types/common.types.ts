@@ -1,4 +1,4 @@
-import { ElementModel, ELEMENT_TYPE } from '@veloce/sdk/cms';
+import { ElementModel, ELEMENT_TYPE } from '@veloceapps/sdk/cms';
 import { Dictionary } from 'lodash';
 
 export interface HttpError {
