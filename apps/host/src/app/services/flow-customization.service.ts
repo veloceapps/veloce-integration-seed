@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { SalesforceApiService } from '@veloceapps/api';
 import {
   Expression,
+  UIDefinition as LegacyUIDefinition,
   Operator,
   Predicate,
   TemplateComponentWithAttachments,
-  UIDefinition as LegacyUIDefinition,
-  UITemplateType,
 } from '@veloceapps/core';
 import { FlowCustomization } from '@veloceapps/sdk';
 import { UIDefinition } from '@veloceapps/sdk/core';
-import { catchError, map, Observable, of, switchMap } from 'rxjs';
+import { Observable, catchError, map, of, switchMap } from 'rxjs';
 import { TemplateComponentMeta } from '../types/templates.types';
 import { isLegacyDefinition } from '../utils/ui.utils';
 import { ModelsApiService } from './models.service';
@@ -75,9 +74,7 @@ export class CustomizationService implements FlowCustomization {
   getShoppingCartComponent?(templateName: string): Observable<TemplateComponentWithAttachments | null> {
     return this.templatesApiService.fetchTemplates().pipe(
       switchMap(templates => {
-        const shoppingCartTemplate = templates.find(
-          template => template.type === UITemplateType.SHOPPING_CART && template.name === templateName,
-        );
+        const shoppingCartTemplate = templates.find(template => template.name === templateName);
 
         if (shoppingCartTemplate) {
           return this.templatesApiService.fetchTemplateComponents(shoppingCartTemplate.name);
@@ -109,12 +106,42 @@ export class CustomizationService implements FlowCustomization {
   getCatalogComponent?(templateName: string): Observable<TemplateComponentWithAttachments | null> {
     return this.templatesApiService.fetchTemplates().pipe(
       switchMap(templates => {
-        const catalogTemplate = templates.find(
-          template => template.type === UITemplateType.CATALOG && template.name === templateName,
-        );
+        const catalogTemplate = templates.find(template => template.name === templateName);
 
         if (catalogTemplate) {
           return this.templatesApiService.fetchTemplateComponents(catalogTemplate.name);
+        } else {
+          return of(null);
+        }
+      }),
+      map(components => {
+        if (!components?.length) {
+          return null;
+        }
+
+        const component = components[0] as TemplateComponentMeta;
+
+        return {
+          id: '',
+          uiTemplateId: '',
+          type: component.type,
+          name: component.name,
+          html: component.template,
+          js: component.script,
+          css: component.styles,
+          json: component.properties,
+        };
+      }),
+    );
+  }
+
+  getAssetsComponent?(templateName: string): Observable<TemplateComponentWithAttachments | null> {
+    return this.templatesApiService.fetchTemplates().pipe(
+      switchMap(templates => {
+        const assetsTemplate = templates.find(template => template.name === templateName);
+
+        if (assetsTemplate) {
+          return this.templatesApiService.fetchTemplateComponents(assetsTemplate.name);
         } else {
           return of(null);
         }

@@ -1,7 +1,7 @@
 {
   "name": "integration-app",
   "private": true,
-  "version": "5.1.0",
+  "version": "6.0.0",
   "description": "Integration App",
   "scripts": {
     "postinstall": "ngcc --properties es2015 browser module main",
@@ -56,10 +56,10 @@
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
     "@ngxs/store": "^3.7.4",
-    "@veloceapps/api": "5.0.14-0",
-    "@veloceapps/components": "5.0.14-0",
-    "@veloceapps/core": "5.0.14-0",
-    "@veloceapps/sdk": "5.0.14-0",
+    "@veloceapps/api": "6.0.0-102",
+    "@veloceapps/components": "6.0.0-102",
+    "@veloceapps/core": "6.0.0-102",
+    "@veloceapps/sdk": "6.0.0-102",
     "axios": "^0.26.1",
     "body-parser": "^1.19.1",
     "csv": "^5.5.3",
