@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { SalesforceApiService } from '@veloceapps/api';
+import { UIDefinitionContainer, UiDef } from '@veloceapps/core';
+import { Observable, map, withLatestFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { UIDef } from '../types/ui.types';
 
 @Injectable({ providedIn: 'root' })
 export class ModelsApiService {
   private readonly SERVICE_URL = `${environment.apiServerUrl}/models`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sfApiService: SalesforceApiService) {}
 
   public fetchModelsNames(): Observable<string[]> {
     return this.http.get<string[]>(this.SERVICE_URL);
@@ -18,11 +19,34 @@ export class ModelsApiService {
     return this.http.get<string[]>(`${this.SERVICE_URL}/${model}`);
   }
 
-  public fetchModelDefinitions(model: string): Observable<UIDef[]> {
-    return this.http.get<UIDef[]>(`${this.SERVICE_URL}/${model}/definitions`);
+  public fetchModelDefinitions(model: string): Observable<UIDefinitionContainer[]> {
+    return this.http.get<UiDef[]>(`${this.SERVICE_URL}/${model}/definitions`).pipe(
+      withLatestFrom(this.getProductModelId(model)),
+      map(([uiDefinitions, modelId]) => {
+        const uiDefinitionContainers: UIDefinitionContainer[] = uiDefinitions.map(uiDefinition => ({
+          id: '',
+          modelId: modelId ?? '',
+          source: uiDefinition,
+        }));
+
+        return uiDefinitionContainers;
+      }),
+    );
   }
 
-  public fetchModelDefinition(model: string, name: string): Observable<UIDef> {
-    return this.http.get<UIDef>(`${this.SERVICE_URL}/${model}/${name}`);
+  public fetchModelDefinition(model: string, name: string): Observable<UIDefinitionContainer> {
+    return this.http.get<UiDef>(`${this.SERVICE_URL}/${model}/${name}`).pipe(
+      withLatestFrom(this.getProductModelId(model)),
+      map(
+        ([uiDefinition, modelId]) =>
+          ({ id: '', modelId: modelId ?? '', source: uiDefinition } satisfies UIDefinitionContainer),
+      ),
+    );
+  }
+
+  private getProductModelId(modelName: string): Observable<string | undefined> {
+    return this.sfApiService
+      .query<{ Id: string }>({ rawCondition: `Name = '${modelName}'`, fields: ['Id'] }, 'VELOCPQ__ProductModel__c')
+      .pipe(map(results => results[0]?.Id));
   }
 }

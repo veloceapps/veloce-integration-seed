@@ -45,6 +45,16 @@
                     </ng-container>
                   </ng-container>
 
+                  <ng-container *ngSwitchCase="'text-array'">
+                    <ng-container *ngIf="{ data: attribute.options } as options">
+                      <input
+                        (change)="patchMultiselect($event.target.value, control)"
+                        [title]="getMultiselectTooltip(options.data)"
+                        [value]="getStringArrayValue(control)"
+                      />
+                    </ng-container>
+                  </ng-container>
+
                   <ng-container *ngSwitchCase="'date'">
                     <input type="date" [formControlName]="attribute.name" />
                   </ng-container>

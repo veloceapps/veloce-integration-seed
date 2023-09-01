@@ -2,16 +2,15 @@ import { Injectable } from '@angular/core';
 import { SalesforceApiService } from '@veloceapps/api';
 import {
   Expression,
-  UIDefinition as LegacyUIDefinition,
   Operator,
   Predicate,
   TemplateComponentWithAttachments,
+  UIDefinitionContainer,
+  isLegacyUIDefinition,
 } from '@veloceapps/core';
 import { FlowCustomization } from '@veloceapps/sdk';
-import { UIDefinition } from '@veloceapps/sdk/core';
 import { Observable, catchError, map, of, switchMap } from 'rxjs';
 import { TemplateComponentMeta } from '../types/templates.types';
-import { isLegacyDefinition } from '../utils/ui.utils';
 import { ModelsApiService } from './models.service';
 import { TemplatesApiService } from './templates.service';
 
@@ -37,7 +36,7 @@ export class CustomizationService implements FlowCustomization {
       .pipe(map(response => response?.[0]?.VELOCPQ__ModelId__r?.Name));
   }
 
-  getUiDefinition(productId: string): Observable<UIDefinition | null> {
+  getUiDefinition(productId: string): Observable<UIDefinitionContainer | null> {
     return this.getModelNameByProductId(productId).pipe(
       switchMap(modelName => {
         if (!modelName) {
@@ -46,15 +45,15 @@ export class CustomizationService implements FlowCustomization {
 
         return this.modelsService.fetchModelDefinitions(modelName);
       }),
-      map(uiDefs => {
-        const nonLegacyUiDefs = uiDefs.filter((uiDef): uiDef is UIDefinition => !isLegacyDefinition(uiDef));
-        return nonLegacyUiDefs.find(uiDef => uiDef.primary) ?? nonLegacyUiDefs[0] ?? null;
+      map(uiDefinitionContainers => {
+        const legacyUiDefs = uiDefinitionContainers.filter(container => !isLegacyUIDefinition(container.source));
+        return legacyUiDefs.find(container => container.source.primary) ?? legacyUiDefs[0] ?? null;
       }),
       catchError(() => of(null)),
     );
   }
 
-  getLegacyUiDefinition(productId: string): Observable<LegacyUIDefinition | null> {
+  getLegacyUiDefinition(productId: string): Observable<UIDefinitionContainer | null> {
     return this.getModelNameByProductId(productId).pipe(
       switchMap(modelName => {
         if (!modelName) {
@@ -63,9 +62,9 @@ export class CustomizationService implements FlowCustomization {
 
         return this.modelsService.fetchModelDefinitions(modelName);
       }),
-      map(uiDefs => {
-        const legacyUiDefs = uiDefs.filter(isLegacyDefinition);
-        return legacyUiDefs.find(uiDef => uiDef.primary) ?? legacyUiDefs[0] ?? null;
+      map(uiDefinitionContainers => {
+        const legacyUiDefs = uiDefinitionContainers.filter(container => isLegacyUIDefinition(container.source));
+        return legacyUiDefs.find(container => container.source.primary) ?? legacyUiDefs[0] ?? null;
       }),
       catchError(() => of(null)),
     );
@@ -136,6 +135,38 @@ export class CustomizationService implements FlowCustomization {
   }
 
   getAssetsComponent?(templateName: string): Observable<TemplateComponentWithAttachments | null> {
+    return this.templatesApiService.fetchTemplates().pipe(
+      switchMap(templates => {
+        const assetsTemplate = templates.find(template => template.name === templateName);
+
+        if (assetsTemplate) {
+          return this.templatesApiService.fetchTemplateComponents(assetsTemplate.name);
+        } else {
+          return of(null);
+        }
+      }),
+      map(components => {
+        if (!components?.length) {
+          return null;
+        }
+
+        const component = components[0] as TemplateComponentMeta;
+
+        return {
+          id: '',
+          uiTemplateId: '',
+          type: component.type,
+          name: component.name,
+          html: component.template,
+          js: component.script,
+          css: component.styles,
+          json: component.properties,
+        };
+      }),
+    );
+  }
+
+  getTemplateComponent?(templateName: string): Observable<TemplateComponentWithAttachments | null> {
     return this.templatesApiService.fetchTemplates().pipe(
       switchMap(templates => {
         const assetsTemplate = templates.find(template => template.name === templateName);

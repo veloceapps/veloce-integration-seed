@@ -9,13 +9,13 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { FlowsApiService } from '@veloceapps/api';
 import { FormErrorMessagesService } from '@veloceapps/components';
-import { ConfigurationUiActions } from 'apps/host/src/app/state/configuration-ui/configuration-ui.actions';
 import { Dictionary } from 'lodash';
 import { BehaviorSubject, map, Subject, takeUntil, tap } from 'rxjs';
+import { ConfigurationUiActions } from '../../../../state/configuration-ui/configuration-ui.actions';
 import { ConfigUiCard, DebugSettings, FlowProperties } from '../../configuration-ui.types';
 
 @Component({
@@ -36,11 +36,11 @@ export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
   public flows$ = new BehaviorSubject<FlowProperties[]>([]);
 
   public formControls = {
-    id: new FormControl(null, Validators.required),
-    debugMode: new FormControl(false),
-    flowId: new FormControl(null, Validators.required),
+    id: new UntypedFormControl(null, Validators.required),
+    debugMode: new UntypedFormControl(false),
+    flowId: new UntypedFormControl(null, Validators.required),
   };
-  public form = new FormGroup(this.formControls);
+  public form = new UntypedFormGroup(this.formControls);
 
   labels: Dictionary<string> = {
     id: 'SF Object ID',
@@ -66,8 +66,8 @@ export class DebugSettingsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.card) {
-      this.initForm(changes.card.currentValue);
+    if (changes['card']) {
+      this.initForm(changes['card'].currentValue);
     }
   }
 

@@ -1,12 +1,16 @@
-const proxyInfo = (() => {
+const localAuthInfo = (() => {
   try {
-    return require('./local/auth.json').proxy;
+    return require('./local/auth.json');
   } catch {
-    return {
-      '/services/*': 'http://localhost:8083',
-    };
+    return;
   }
 })();
+
+const serverUrl = localAuthInfo?.serverUrl ?? 'http://localhost:8083';
+
+const proxyInfo = {
+  '/services/*': serverUrl,
+};
 
 const baseConfig = {
   secure: true,
@@ -14,6 +18,7 @@ const baseConfig = {
   logLevel: 'info', // ['debug', 'info', 'warn', 'error', 'silent']
   headers: {
     Origin: 'https://localhost.force.com',
+    Connection: 'keep-alive',
   },
 };
 

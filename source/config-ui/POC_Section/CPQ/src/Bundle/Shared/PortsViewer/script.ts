@@ -12,16 +12,16 @@ import {
 import { ElementDefinition, ScriptHost } from '@veloceapps/sdk/cms';
 import {
   ConfigurationService,
-  generateLineItem,
   LineItemWorker,
+  generateLineItem,
   mapAttributes,
   upsertAttributes,
 } from '@veloceapps/sdk/core';
 import { Dictionary, flatten, isEmpty } from 'lodash';
-import { BehaviorSubject, combineLatest, map, Observable, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
 
 type SelectionMode = 'radio' | 'single' | 'multiple';
-type CellEditFormat = 'text' | 'number' | 'select' | 'checkbox' | 'date';
+type CellEditFormat = 'text' | 'number' | 'select' | 'checkbox' | 'date' | 'text-array';
 
 interface ScriptContent {
   // inputs
@@ -46,6 +46,9 @@ interface ScriptContent {
   getCellValue: (data: any, col: ColumnDef) => any;
   onRowSelect: (data: RowData, tableData: TableData) => void;
   onToggleSelectAll: (select: boolean, tableData: TableData) => void;
+  patchMultiselect: (value: string, col: ColumnDef, row: RowData) => void;
+  getMultiselectTooltip: (options: string[]) => string;
+  getStringArrayValue: (control: FormControl) => string;
 }
 
 interface TableData {
@@ -81,6 +84,7 @@ interface ColumnDef {
   headerName: string;
   width?: string;
   class?: string;
+  displayType?: 'text' | 'number' | 'price' | 'date';
   classRules?: (data: RowData) => { [key: string]: boolean };
   valueGetter?: (data: RowData) => any;
   editFormat?: (data: RowData) => CellEditFormat;
@@ -135,6 +139,10 @@ export class Script implements OnInit, OnDestroy {
 
   constructor(public host: ScriptHost<ScriptContent>) {
     this.configurationService = this.host.injector.get(ConfigurationService);
+
+    this.host.getMultiselectTooltip = this.getMultiselectTooltip.bind(this);
+    this.host.patchMultiselect = this.patchMultiselect.bind(this);
+    this.host.getStringArrayValue = this.getStringArrayValue.bind(this);
 
     this.pricingEnabled = this.configurationService.contextSnapshot.properties.PricingEnabled === 'true';
     this.host.getCellValue = this.getCellValue;
@@ -244,8 +252,8 @@ export class Script implements OnInit, OnDestroy {
       id: product?.productId,
       name: product?.productName || product?.typeName,
       qty: 1,
-      listPrice: `$${price.list.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
-      netPrice: `$${price.net.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+      listPrice: `${price.list}`,
+      netPrice: `${price.net}`,
       type: product?.typeName,
       attributes,
       selected: !!li,
@@ -285,6 +293,7 @@ export class Script implements OnInit, OnDestroy {
       headerName: 'List Price',
       width: '15%',
       class: 'text-right',
+      displayType: 'price',
     };
 
     const discountTypeColDef: ColumnDef = {
@@ -307,6 +316,7 @@ export class Script implements OnInit, OnDestroy {
       headerName: 'Discount',
       class: 'text-right',
       width: '7%',
+      displayType: 'number',
       valueGetter: data => this.getMainCharge(data.model)?.priceAdjustment?.amount,
       editFormat: () => 'number',
       onValueChange: (value, data) => this.priceAdjustmentHandler(data, { amount: value }),
@@ -317,7 +327,13 @@ export class Script implements OnInit, OnDestroy {
           : 'To enable Discounts, turn on the Enable Price Adjustment option for the Price List.',
     };
 
-    const netPriceColDef: ColumnDef = { field: 'netPrice', headerName: 'Net Price', width: '15%', class: 'text-right' };
+    const netPriceColDef: ColumnDef = {
+      field: 'netPrice',
+      headerName: 'Net Price',
+      width: '15%',
+      class: 'text-right',
+      displayType: 'price',
+    };
 
     return [
       ...(approvalsEnabled
@@ -372,7 +388,7 @@ export class Script implements OnInit, OnDestroy {
     }
 
     const attributes = flatten(products.map(p => p.attributes as RuntimeAttribute[])).reduce((acc, attr) => {
-      if (!acc[attr.name] && attr.properties?.column) {
+      if (!acc[attr.name] && attr.properties?.['column']) {
         return { ...acc, [attr.name]: attr };
       }
       return acc;
@@ -398,6 +414,10 @@ export class Script implements OnInit, OnDestroy {
         return 'date';
       }
 
+      if (attribute.type === 'MULTIPLE') {
+        return 'text-array';
+      }
+
       const modelDomain = data.model?.attributeDomains[attribute.name];
       const isNumberFormat =
         NUMERIC_TYPES.includes(attribute.type) && modelDomain
@@ -409,7 +429,7 @@ export class Script implements OnInit, OnDestroy {
 
     return {
       field: `attr_${attribute.name}`,
-      headerName: attribute.properties.column,
+      headerName: attribute.properties['column'],
       class: NUMERIC_TYPES.includes(attribute.type) ? 'text-right' : '',
       width: '10%',
       valueGetter: data => data.model?.attributes.find(({ name }) => name === attribute.name)?.value ?? '',
@@ -583,4 +603,21 @@ export class Script implements OnInit, OnDestroy {
   private getUpdatedCfgStatus = (li: LineItem): CfgStatus => {
     return li.cfgStatus === 'Required' ? 'Required' : 'User';
   };
+
+  private getMultiselectTooltip(options: string[]) {
+    if (!options || !options.length) {
+      return `String value split with space and comma.`;
+    }
+    return `Possible values are: ${options.join(', ')}. String value split with space and comma.`;
+  }
+
+  private patchMultiselect(value: string, col: ColumnDef, row: RowData) {
+    const result: string[] = value.split(', ');
+    row.controls[col.field]?.setValue(result);
+    col.onValueChange && col.onValueChange(result, row);
+  }
+
+  private getStringArrayValue(control: FormControl): string {
+    return control.value?.join(', ');
+  }
 }

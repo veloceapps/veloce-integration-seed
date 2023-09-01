@@ -28,3 +28,12 @@
   max-width: $maxWidth;
   margin: 0 auto;
 }
+
+::ng-deep .vl-info-tooltip {
+  .p-tooltip-text {
+    font-size: 11px;
+    line-height: 14px;
+    letter-spacing: 0.3px;
+    background: var(--vl-text-color-accent);
+  }
+}

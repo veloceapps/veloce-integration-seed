@@ -1,9 +1,10 @@
-import { OnDestroy, OnInit } from '@angular/core';
+import { OnDestroy, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ToastService } from '@veloceapps/components';
 import { Attribute, LineItem, RuntimeAttribute, RuntimeModel } from '@veloceapps/core';
 import { ElementDefinition, ScriptHost } from '@veloceapps/sdk/cms';
-import { ConfigurationService, findLineItem, LineItemWorker } from '@veloceapps/sdk/core';
-import { BehaviorSubject, filter, map, Observable, shareReplay, Subject, takeUntil, tap } from 'rxjs';
+import { ConfigurationService, LineItemWorker, filterOutTechnicalAttributes, findLineItem } from '@veloceapps/sdk/core';
+import { BehaviorSubject, Observable, Subject, filter, map, shareReplay, takeUntil, tap } from 'rxjs';
 
 interface ScriptContent {
   lineItem$: BehaviorSubject<LineItem | undefined>;
@@ -15,11 +16,14 @@ interface ScriptContent {
   saveHandler: (form: FormGroup) => void;
   discardHandler: () => void;
   closeHandler: () => void;
+  patchMultiselect: (value: string, control: FormControl) => void;
+  getMultiselectTooltip: (options: string[]) => string;
+  getStringArrayValue: (control: FormControl) => string;
 }
 
 interface AttributeData {
   name: string;
-  type: 'boolean' | 'text' | 'number' | 'select' | 'date';
+  type: 'boolean' | 'text' | 'number' | 'select' | 'date' | 'text-array';
   value: any;
   readonly: boolean;
   options?: string[];
@@ -37,12 +41,17 @@ interface AttributeData {
 export class Script implements OnInit, OnDestroy {
   configurationService: ConfigurationService;
   runtimeModel?: RuntimeModel;
+  toastService = inject(ToastService);
 
   destroy$ = new Subject<void>();
 
   constructor(public host: ScriptHost<ScriptContent>) {
     this.configurationService = this.host.injector.get(ConfigurationService);
     this.runtimeModel = this.configurationService.getRuntimeModel();
+
+    this.host.getMultiselectTooltip = this.getMultiselectTooltip.bind(this);
+    this.host.patchMultiselect = this.patchMultiselect.bind(this);
+    this.host.getStringArrayValue = this.getStringArrayValue.bind(this);
 
     this.host.lineItem$ = new BehaviorSubject<LineItem | undefined>(undefined);
     this.host.isOpened$ = this.host.lineItem$.pipe(map(lineItem => !!lineItem));
@@ -63,10 +72,11 @@ export class Script implements OnInit, OnDestroy {
       map(model => {
         const component = model && this.runtimeModel?.components.get(model.type);
         const tableAttributesNames = [
-          ...new Set(component?.attributes.filter(attr => attr.properties?.column).map(attr => attr.name)),
+          ...new Set(component?.attributes.filter(attr => attr.properties?.['column']).map(attr => attr.name)),
         ];
+
         return model
-          ? model.attributes
+          ? filterOutTechnicalAttributes(model.attributes)
               .filter(attribute => !tableAttributesNames.includes(attribute.name))
               .map(attribute => {
                 const runtimeAttribute = component?.attributes.find(a => a.name === attribute.name);
@@ -74,7 +84,6 @@ export class Script implements OnInit, OnDestroy {
               })
           : undefined;
       }),
-      map(attributes => attributes?.filter(({ name }) => !name.startsWith('_'))),
       shareReplay(),
     );
 
@@ -122,7 +131,12 @@ export class Script implements OnInit, OnDestroy {
     const attributes = Object.entries(form.value).map(([name, value]) => ({ name, value }));
     const updated = new LineItemWorker(this.host.lineItem$.value).patchAttribute(attributes).li;
 
-    this.configurationService.patch(updated);
+    this.configurationService
+      .patch$(updated)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.toastService.add({ summary: 'Attributes saved successfully' });
+      });
   };
 
   private discardHandler = (): void => {
@@ -145,7 +159,9 @@ export class Script implements OnInit, OnDestroy {
         : runtimeAttribute?.domain?.some(d => d?.includes('..')) && modelAttribute.type !== 'DATE';
 
     let type: AttributeData['type'];
-    if (modelAttribute.type === 'BOOLEAN') {
+    if (modelAttribute.type === 'MULTIPLE') {
+      type = 'text-array';
+    } else if (modelAttribute.type === 'BOOLEAN') {
       type = 'boolean';
     } else if (modelAttribute.type === 'DATE') {
       type = 'date';
@@ -165,4 +181,20 @@ export class Script implements OnInit, OnDestroy {
       readonly: runtimeAttribute?.calculated ?? false,
     };
   };
+
+  private getMultiselectTooltip(options: string[]) {
+    if (!options || !options.length) {
+      return `String value split with space and comma.`;
+    }
+    return `Possible values are: ${options.join(', ')}. String value split with space and comma.`;
+  }
+
+  private patchMultiselect(value: string, control: FormControl) {
+    const result: string[] = value.split(', ');
+    control.setValue(result);
+  }
+
+  private getStringArrayValue(control: FormControl): string {
+    return control.value?.join(', ');
+  }
 }

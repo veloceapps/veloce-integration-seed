@@ -1,42 +1,21 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
+    "outDir": "./dist",
+    "rootDir": ".",
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
     "moduleResolution": "node",
+    "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2017",
+    "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {
-      "@angular/*": [ "node_modules/@angular/*" ],
-      "@veloceapps/*": [ "node_modules/@veloceapps/*" ],
-      "ngx-bootstrap/*": [ "node_modules/ngx-bootstrap/*" ]
-    }
+    "lib": ["ES2021", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": "."
   },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true,
-    "strictNullInputTypes": false
-  },
-  "exclude": [
-    "node_modules",
-    "server"
-  ]
+  "exclude": ["node_modules", "server"]
 }

@@ -1,16 +1,9 @@
 import { OnDestroy, OnInit } from '@angular/core';
 import { QuoteApiService } from '@veloceapps/api';
 import { ChargeGroupItem, LineItem } from '@veloceapps/core';
-import {
-  ApplyProductConfigurationAction,
-  ElementDefinition,
-  IntegrationState,
-  NavigateBackAction,
-  ScriptHost,
-  TemplatesService,
-} from '@veloceapps/sdk/cms';
+import { ElementDefinition, IntegrationState, FlowAction, ScriptHost, TemplatesService } from '@veloceapps/sdk/cms';
 import { ConfigurationService } from '@veloceapps/sdk/core';
-import { BehaviorSubject, finalize, map, Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, finalize, map, switchMap, takeUntil } from 'rxjs';
 
 interface ScriptContext {
   model$: BehaviorSubject<LineItem | undefined>;
@@ -50,7 +43,7 @@ interface Tab {
 @ElementDefinition({
   name: 'Bundle',
   type: 'CUSTOM',
-  children: ['bundleName', 'country', 'Phones', 'Plans', 'Deliveries', 'Shared'],
+  children: ['bundleName', 'country', 'states', 'Phones', 'Plans', 'Deliveries', 'Shared'],
   model: {
     lineItem: '/Bundle',
   },
@@ -126,9 +119,9 @@ export class Script implements OnInit, OnDestroy {
     const netPrice = chargeGroupItems.reduce((total, item) => total + (item.netPrice ?? 0), 0);
 
     if (!netPrice) {
-      return '$0.00';
+      return '0';
     }
-    return `$${netPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+    return `${netPrice}`;
   };
 
   private docgenHandler = (): void => {
@@ -161,7 +154,7 @@ export class Script implements OnInit, OnDestroy {
     this.host.saveInProgress$.next(true);
 
     this.quoteService
-      .getQuote(quoteId)
+      .getQuoteDraft(quoteId)
       .pipe(
         switchMap(quoteDraft => this.quoteService.upsertQuote({ ...quoteDraft, currentState })),
         finalize(() => this.host.saveInProgress$.next(false)),
@@ -197,10 +190,10 @@ export class Script implements OnInit, OnDestroy {
   };
 
   private flowApplyHandler = (): void => {
-    this.integrationState.dispatch(ApplyProductConfigurationAction());
+    this.integrationState.dispatch(FlowAction.ApplyProductConfigurationAction());
   };
 
   private flowCancelHandler = (): void => {
-    this.integrationState.dispatch(NavigateBackAction());
+    this.integrationState.dispatch(FlowAction.NavigateBackAction());
   };
 }

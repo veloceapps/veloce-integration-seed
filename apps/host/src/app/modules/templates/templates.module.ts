@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TemplatesComponent } from './templates.component';
-import { TreeModule } from 'primeng/tree';
-import { RuntimeModule } from '@veloceapps/sdk/runtime';
-import { TemplateStoryComponent } from './components/template-story.component';
-import { TemplatesApiService } from '../../services/templates.service';
 import { LoaderModule } from '@veloceapps/components';
+import { RuntimeModule } from '@veloceapps/sdk/runtime';
+import { TreeModule } from 'primeng/tree';
+import { TemplatesApiService } from '../../services/templates.service';
+import { TemplateStoryComponent } from './components/template-story.component';
+import { TemplatesComponent } from './templates.component';
 
 const routes: Routes = [
   {

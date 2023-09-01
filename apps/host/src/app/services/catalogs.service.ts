@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UIDefinition } from '@veloceapps/sdk/core';
+import { UIDefinition } from '@veloceapps/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 

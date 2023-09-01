@@ -9,7 +9,5 @@
     "pricingEnabled": false,
     "priceList": null
   },
-  "children": [
-    "Bundle"
-  ]
+  "children": ["Bundle"]
 }

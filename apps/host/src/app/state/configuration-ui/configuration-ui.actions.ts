@@ -1,4 +1,4 @@
-import { DebugSettings } from 'apps/host/src/app/modules/configuration-ui/configuration-ui.types';
+import { DebugSettings } from '../../modules/configuration-ui/configuration-ui.types';
 
 export namespace ConfigurationUiActions {
   export class SetDebugSettings {

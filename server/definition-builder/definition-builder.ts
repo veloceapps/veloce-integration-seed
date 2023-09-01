@@ -1,5 +1,5 @@
+import { UIDefinition, UIElement } from '@veloceapps/core';
 import { ElementDefaultMetadata } from '@veloceapps/sdk/cms';
-import { UIDefinition, UIElement } from '@veloceapps/sdk/core';
 import { existsSync } from 'fs';
 import { getDirectoryNames, readFileSafe, toBase64 } from '../utils/common.utils';
 import { extractElementMetadata } from './definition-builder.utils';
@@ -41,7 +41,7 @@ export class DefinitionBuilder {
     const children: UIElement[] = [];
     this.validateDefinition(path, definition);
 
-    for (const child of definition.children) {
+    for (const child of definition.children ?? []) {
       children.push(await this.parseElement(`${path}/${child}`));
     }
 

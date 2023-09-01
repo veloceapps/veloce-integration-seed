@@ -6,14 +6,14 @@ import { ElementDefinition, IntegrationState, ScriptHost } from '@veloceapps/sdk
 import { ConfigurationService } from '@veloceapps/sdk/core';
 import {
   BehaviorSubject,
+  Observable,
+  Subject,
   finalize,
   first,
   map,
-  Observable,
   of,
   skip,
   startWith,
-  Subject,
   switchMap,
   takeUntil,
   tap,
@@ -132,7 +132,7 @@ export class Script implements OnInit, OnDestroy {
     this.host.activeTab = tabs[0].id;
     this.host.templates$ = new BehaviorSubject<DocumentTemplate[]>([]);
     this.host.attachments$ = new BehaviorSubject<Attachment[]>([]);
-    this.host.attachmentsFormArray = new FormArray([]);
+    this.host.attachmentsFormArray = new FormArray([] as any[]);
     this.host.attachmentInProgress$ = new BehaviorSubject<boolean>(false);
     this.host.generateInProgress$ = new BehaviorSubject<boolean>(false);
 
@@ -313,7 +313,7 @@ export class Script implements OnInit, OnDestroy {
   private getQuoteDraft = (quoteId: string): Observable<QuoteDraft | undefined> => {
     const rootLineItem = this.configurationService.getSnapshot();
 
-    return this.quoteService.getQuote(quoteId).pipe(
+    return this.quoteService.getQuoteDraft(quoteId).pipe(
       map(quoteDraft => {
         return {
           ...quoteDraft,

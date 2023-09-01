@@ -134,6 +134,17 @@
             (change)="col.onValueChange && col.onValueChange($event.target.value, row)"
           />
         </ng-container>
+
+        <ng-container *ngSwitchCase="'text-array'">
+          <ng-container *ngIf="{data: col.dynamicOptions && col.dynamicOptions(row)} as dynamicOptions">
+            <input
+              (change)="patchMultiselect($event.target.value, col, row)"
+              [title]="getMultiselectTooltip(dynamicOptions.data)"
+              [value]="getStringArrayValue(row.controls[col.field])"
+            />
+          </ng-container>
+        </ng-container>
+
         <ng-container *ngSwitchCase="'number'">
           <input
             type="number"
@@ -155,10 +166,23 @@
             </ng-container>
           </select>
         </ng-container>
-        <ng-container *ngSwitchDefault> {{ value }} </ng-container>
+        <ng-container *ngSwitchDefault>
+          <ng-container *ngTemplateOutlet="rawDisplay; context: { value: value, type: col.displayType }"></ng-container>
+        </ng-container>
       </ng-container>
 
-      <ng-container *ngIf="!row.model"> {{ value }} </ng-container>
+      <ng-container *ngIf="!row.model">
+        <ng-container *ngTemplateOutlet="rawDisplay; context: { value: value, type: col.displayType }"></ng-container>
+      </ng-container>
     </div>
   </td>
+</ng-template>
+
+<ng-template #rawDisplay let-value="value" let-type="type">
+  <ng-container [ngSwitch]="type">
+    <ng-container *ngSwitchCase="'price'">{{ value | vlPrice }}</ng-container>
+    <ng-container *ngSwitchCase="'date'">{{ value | vlDate }}</ng-container>
+    <ng-container *ngSwitchCase="'number'">{{ value | vlNumber }}</ng-container>
+    <ng-container *ngSwitchDefault>{{ value }}</ng-container>
+  </ng-container>
 </ng-template>

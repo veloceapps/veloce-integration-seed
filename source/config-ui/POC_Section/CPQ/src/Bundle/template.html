@@ -15,8 +15,10 @@
 
   <div class="footer">
     <div class="metrics" *ngIf="pricingEnabled">
-      <span class="metric"> Total Recurring Revenue <strong> {{ totalRecurring$ | async }} </strong> </span>
-      <span class="metric"> Total Non-Recurring Revenue <strong> {{ totalNonRecurring$ | async }} </strong> </span>
+      <span class="metric"> Total Recurring Revenue <strong> {{ totalRecurring$ | async | vlPrice }} </strong> </span>
+      <span class="metric">
+        Total Non-Recurring Revenue <strong> {{ totalNonRecurring$ | async | vlPrice }} </strong>
+      </span>
     </div>
 
     <div class="actions">
