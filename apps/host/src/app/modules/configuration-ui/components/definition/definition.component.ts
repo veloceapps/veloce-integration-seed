@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastService, ToastType } from '@veloceapps/components';
-import { UIDefinitionContainer, isDefined, isLegacyUIDefinition } from '@veloceapps/core';
+import { UIDefinitionContainer, isDefined } from '@veloceapps/core';
 import { CMSPreviewConfig } from '@veloceapps/sdk/cms';
-import { ConfigurationRuntimeService, ConfigurationState } from '@veloceapps/sdk/core';
+import { ConfigurationRuntimeService, ConfigurationStateService, RuntimeSettingsService } from '@veloceapps/sdk/core';
 import { ModelsApiService } from 'apps/host/src/app/services/models.service';
-import { Observable, Subject, catchError, filter, first, map, of, shareReplay, switchMap } from 'rxjs';
+import { Observable, Subject, catchError, combineLatest, filter, first, map, of, shareReplay, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-definition',
@@ -15,7 +15,6 @@ import { Observable, Subject, catchError, filter, first, map, of, shareReplay, s
 })
 export class DefinitionComponent implements OnDestroy {
   public uiDefinition$: Observable<UIDefinitionContainer | undefined>;
-  public isLegacy$: Observable<boolean>;
   public config: CMSPreviewConfig;
 
   private destroy$ = new Subject<void>();
@@ -24,8 +23,9 @@ export class DefinitionComponent implements OnDestroy {
     private service: ModelsApiService,
     private route: ActivatedRoute,
     private toastService: ToastService,
-    private configurationState: ConfigurationState,
+    private configurationStateService: ConfigurationStateService,
     private configurationRuntimeService: ConfigurationRuntimeService,
+    private runtimeSettings: RuntimeSettingsService,
   ) {
     this.uiDefinition$ = this.route.params.pipe(
       switchMap(({ name, definition }) =>
@@ -39,10 +39,9 @@ export class DefinitionComponent implements OnDestroy {
       shareReplay(),
     );
 
-    this.isLegacy$ = this.uiDefinition$.pipe(map(uiDef => (uiDef ? isLegacyUIDefinition(uiDef.source) : false)));
-
     this.config = {
       init$: () => this.init$(),
+      //customizationMode: true,
     };
   }
 
@@ -52,11 +51,12 @@ export class DefinitionComponent implements OnDestroy {
   }
 
   public init$(): Observable<void> {
-    return this.uiDefinition$.pipe(
+    return combineLatest([this.uiDefinition$, this.runtimeSettings.create()]).pipe(
+      map(([uiDefinition]) => uiDefinition),
       filter(isDefined),
       first(),
       switchMap(uiDefinitionContainer => this.configurationRuntimeService.initTestMode(uiDefinitionContainer)),
-      switchMap(() => this.configurationState.init$()),
+      switchMap(() => this.configurationStateService.init$()),
     );
   }
 }

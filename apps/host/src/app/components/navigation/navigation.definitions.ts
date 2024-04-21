@@ -3,22 +3,22 @@ import { MenuItem } from 'primeng/api';
 export const navigationItems: MenuItem[] = [
   {
     label: 'Configuration UI',
-    icon: 'icon ion-md-cube',
+    icon: 'vl-icon vl-icon-product-model',
     routerLink: '/configuration-ui',
   },
   {
     label: 'Catalogs',
-    icon: 'icon ion-md-filing',
+    icon: 'vl-icon vl-icon-catalog',
     routerLink: '/catalogs',
   },
   // {
   //   label: 'Templates',
-  //   icon: 'icon ion-md-today',
+  //   icon: 'vl-icon vl-icon-template',
   //   routerLink: '/templates',
   // },
   {
     label: 'Flow debug',
-    icon: 'icon ion-md-bug',
+    icon: 'vl-icon vl-icon-debug',
     routerLink: '/flow/debug',
   },
 ];

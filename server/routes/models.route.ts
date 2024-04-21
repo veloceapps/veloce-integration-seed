@@ -14,7 +14,7 @@ router.get('/', async (req: Request, res: Response) => {
     const err: HttpError = {
       status: 500,
       message: 'Failed to get Models list',
-      body: e
+      body: e,
     };
 
     res.status(500).json(err);
@@ -31,7 +31,7 @@ router.get('/:modelName', async (req: Request, res: Response) => {
     const err: HttpError = {
       status: 500,
       message: 'Failed to get Model metadata',
-      body: e
+      body: e,
     };
 
     res.status(500).json(err);
@@ -48,7 +48,7 @@ router.get('/:modelName/definitions', async (req: Request, res: Response) => {
     const err: HttpError = {
       status: 500,
       message: 'Failed to get Model metadata',
-      body: e
+      body: e,
     };
 
     res.status(500).json(err);
@@ -59,7 +59,7 @@ router.get('/:modelName/:definition', async (req: Request, res: Response) => {
   try {
     const { modelName, definition } = req.params ?? {};
     const uiDefinitions = await getCompiledModelDefinitions(modelName);
-    const uiDefinition = uiDefinitions.find(uiDef => uiDef.name === definition);
+    const uiDefinition = uiDefinitions.find(uiDef => uiDef.source.name === definition);
 
     if (!uiDefinition) {
       throw new Error(`No definition ${definition} found on model ${modelName}`);
@@ -72,7 +72,7 @@ router.get('/:modelName/:definition', async (req: Request, res: Response) => {
     const err: HttpError = {
       status: 500,
       message: 'Failed to get Model metadata. ' + e?.message ?? '',
-      body: e
+      body: e,
     };
 
     res.status(500).json(err);

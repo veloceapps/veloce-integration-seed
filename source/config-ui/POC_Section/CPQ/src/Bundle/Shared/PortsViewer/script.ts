@@ -562,13 +562,13 @@ export class Script implements OnInit, OnDestroy {
     const priceAdjustment: PriceAdjustment | undefined = typeChanged
       ? adjustment.type
         ? {
-            amount: charge.priceAdjustment?.amount ?? 0,
+            amount: charge.priceAdjustment?.amount || 0,
             type: adjustment.type,
             explanation: '',
           }
         : undefined
       : {
-          amount: adjustment.amount ?? 0,
+          amount: adjustment.amount || 0,
           type: charge.priceAdjustment?.type ?? 'DISCOUNT_PERCENT',
           explanation: '',
         };

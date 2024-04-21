@@ -1,8 +1,9 @@
 type Bundle {
     string bundleName;
+    @(domainComputation="Before")
     string country = ["Latvia", "Lithuania", "Estonia"];
 
-    @(defaultvalue="Alaska, New York")
+    @(defaultvalue="Alaska, New York", domainComputation="Before")
     string[] states = ["Alaska", "Alabama", "Arkansas", "American Samoa", "Arizona", "California", "Colorado", "Connecticut", "District of Columbia", "Delaware", "Florida", "Georgia", "Guam", "Hawaii", "Iowa", "Idaho", "Illinois", "Indiana", "Kansas", "Kentucky", "Louisiana", "Massachusetts", "Maryland", "Maine", "Michigan", "Minnesota", "Missouri", "Mississippi", "Montana", "North Carolina", "North Dakota", "Nebraska", "New Hampshire", "New Jersey", "New Mexico", "Nevada", "New York"];
 
     @(domainComputation="true", priceOptions="true")
@@ -20,14 +21,18 @@ type Bundle {
 }
 
 type Phone {
+    @(domainComputation="Before")
     string color = ["Black","White","Pink"];
+    @(domainComputation="Before")
     string ram = ["4 GB", "8 GB", "12 GB"];
     string screenSize = "6.7";
+    @(domainComputation="Before")
     string SIM_Count = ["1", "2"];
     string comments;
-    @(column="Addons for phone")
+    @(column="Addons for phone", domainComputation="Before")
     string[] addons = ["Case", "Contract", "Glass", "Wireless Charger"];
 
+    @(domainComputation="Before")
     string[] addonsForLife = ["Extended Warranty", "Insurance", "Digital TV"];
 
     @(domainComputation="true", priceOptions="true")
@@ -36,7 +41,9 @@ type Phone {
 }
 
 type Accessory {
+    @(domainComputation="Before")
     string power = ["3W","5W"];
+    @(domainComputation="Before")
     string color = ["Black","White"];
 
     @(domainComputation="true", priceOptions="true")

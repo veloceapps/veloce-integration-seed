@@ -1,6 +1,7 @@
 import { UITemplateComponentType, UITemplateType } from '@veloceapps/core';
 
 export interface Template {
+  id: string;
   name: string;
   type: UITemplateType;
   components: TemplateComponent[];

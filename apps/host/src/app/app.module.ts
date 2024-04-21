@@ -5,7 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsModule } from '@ngxs/store';
 import { ApiModule } from '@veloceapps/api';
 import { ToastModule } from '@veloceapps/components';
-import { FLOW_CUSTOMIZATION } from '@veloceapps/sdk';
+import { LauncherModule } from '@veloceapps/sdk/cms';
+import { FLOW_CUSTOMIZATION } from '@veloceapps/sdk/core';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +25,7 @@ import { ConfigurationUiState } from './state/configuration-ui/configuration-ui.
     NavigationModule,
     ToastModule,
     ApiModule,
+    LauncherModule,
     NgxsModule.forRoot([ConfigurationUiState], {
       developmentMode: !environment.production,
     }),

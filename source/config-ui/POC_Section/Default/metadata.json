@@ -1,11 +1,13 @@
 {
   "name": "Default",
   "type": "CONFIGURATION",
-  "children": ["Bundle"],
   "primary": false,
   "version": 2,
   "createdTimestamp": 1648735181388,
   "properties": {
     "rootType": "Bundle"
-  }
+  },
+  "children": [
+    "Bundle"
+  ]
 }

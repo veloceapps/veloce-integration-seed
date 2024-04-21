@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ConfigurationProcessor } from '@veloceapps/core';
 import { environment } from '../../environments/environment';
 import { Template, TemplateComponentMeta, TemplateComponentStory } from '../types/templates.types';
 
@@ -19,5 +20,9 @@ export class TemplatesApiService {
 
   public fetchStory(templateName: string, componentName: string, storyName: string) {
     return this.http.get<TemplateComponentStory>(`${this.SERVICE_URL}/${templateName}/${componentName}/${storyName}`);
+  }
+
+  public fetchConfigurationProcessors(templateName: string) {
+    return this.http.get<ConfigurationProcessor[] | null>(`${this.SERVICE_URL}/processors/${templateName}`);
   }
 }

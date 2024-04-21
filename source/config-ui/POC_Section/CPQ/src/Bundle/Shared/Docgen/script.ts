@@ -232,7 +232,11 @@ export class Script implements OnInit, OnDestroy {
 
   private initAttributesForm = (attributes: TemplateAttribute[]): void => {
     const controls = attributes.reduce((acc, attr) => {
-      return attr.name ? { ...acc, [attr.name]: new FormControl(attr.value) } : acc;
+      let value: string | boolean = attr.value;
+      if (attr.type === 'CHECKBOX') {
+        value = attr.value === 'true';
+      }
+      return attr.name ? { ...acc, [attr.name]: new FormControl(value) } : acc;
     }, {} as { [key: string]: FormControl });
 
     this.host.attributesForm = new FormGroup(controls);
