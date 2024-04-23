@@ -12,7 +12,9 @@
     "build": "ng build",
     "start:host": "ng serve",
     "start:api": "ts-node server/server.ts",
+    "start:demo-ui": "ng serve demo",
     "start": "npm-run-all -l -p start:api start:host",
+    "start:demo": "npm-run-all -l -p start:api start:host start:demo-ui",
     "auth": "vl-auth -u studio-dev"
   },
   "dependencies": {

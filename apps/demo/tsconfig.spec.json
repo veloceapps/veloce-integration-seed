@@ -1,0 +1,23 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/spec",
+    "types": [
+      "jasmine"
+    ],
+    "paths": {
+      "types": ["apps/catalog/src/app/types/index.ts"],
+      "@angular/*": ["node_modules/@angular/*"],
+      "@veloceapps/*": ["node_modules/@veloceapps/*"]
+    }
+  },
+  "files": [
+    "src/test.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts"
+  ]
+}
